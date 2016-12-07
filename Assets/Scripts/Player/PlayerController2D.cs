@@ -96,6 +96,7 @@ public class PlayerController2D : MonoBehaviour {
 
 			isDead = true;
 			rb2D.isKinematic = true;
+			rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
 
 
