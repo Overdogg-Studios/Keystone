@@ -60,7 +60,7 @@
      <Compile Include="Assets\Scripts\Game\SavePoint.cs" />
      <Compile Include="Assets\Scripts\Game\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Player\ContactPoint.cs" />
-     <Compile Include="Assets\Scripts\Player\PlayerController2D.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <None Include="Assets\Scripts\Camera\PixelPerfectCamera\background_art_license.txt" />
      <None Include="Assets\Scripts\Camera\PixelPerfectCamera\README.txt" />
  <Reference Include="UnityEngine.Advertisements">

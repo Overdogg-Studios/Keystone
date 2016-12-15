@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ContactPoint : MonoBehaviour {
 
-	public float radius;
+	public const float radius = 0.01f;
 	// Use this for initialization
 	void Start () {
 	

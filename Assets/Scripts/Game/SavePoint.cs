@@ -6,11 +6,11 @@ public class SavePoint : MonoBehaviour {
 	public float xPosition;
 	public float yPosition;
 
-	private PlayerController2D  player;
+	private PlayerController  player;
 	// Use this for initialization
 	void Start () {
 
-		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
+		player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		xPosition = transform.position.x;
 		yPosition = transform.position.y;
 	}
@@ -25,5 +25,8 @@ public class SavePoint : MonoBehaviour {
 
 			player.setSavePoint(GetComponent<SavePoint>());
 		}
+	}
+	public Vector3 getPosition() {
+		return new Vector3(xPosition, yPosition, -1);
 	}
 }

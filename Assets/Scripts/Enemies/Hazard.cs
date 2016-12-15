@@ -4,14 +4,14 @@ using System.Collections;
 public class Hazard : MonoBehaviour {
 
 	public int damage;
-	private PlayerController2D  allen;
+	private PlayerController  allen;
 	
 
 	void Start() {
-		allen = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController2D>();
+		
 	}
 	void OnTriggerEnter2D(Collider2D other) {
-
+		allen = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 		Debug.Log("WE DID DAMAGE");
 		if(other.gameObject.tag == "Player") {
 
