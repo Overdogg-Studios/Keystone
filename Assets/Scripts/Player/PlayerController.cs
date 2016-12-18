@@ -12,18 +12,21 @@ public class PlayerController : MonoBehaviour {
 	public float deceleration; //How fast the player decelerates down to 0 speed.
 	public float sprintMultiplier; //How much the player's movement speed is multiplied if the player is sprinting.
 	private float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
+	private float direction; //Which way the player is traveling. 1 for right, -1 for left.
+
+	private const float LEFT = -1;
+	private const float RIGHT = 1;
 
 	public float rollTime;
+	public float rollDelay; //How long a player has to wait before they can roll again.
 	public float rollSpeedMultiplier;
 	private float currentRollTime;
+	private float currentRollDelay;
 	private bool isRolling;
 
 
 	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
 	public int maxVelocity; //The player's maximum speed (falling speed primarily).
-
-	public int currentPlayerHealth; //The current player's health.
-	public int maxPlayerHealth; //The total player's health.
 
 	//Points used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
 	public Transform leftGroundPoint;
@@ -48,6 +51,8 @@ public class PlayerController : MonoBehaviour {
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
 
+	private ProjectileShooter weapon;
+	private HealthPool hp;
 	GameObject deathScreen;
 
 	public SavePoint lastSavePoint;
@@ -72,15 +77,20 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		direction = 1;
+		weapon = GetComponent<ProjectileShooter>();
 		currentSprintMultiplier = 1;
         jumpTimeCounter = jumpTime;
 		rb2D = GetComponent<Rigidbody2D>();
-		currentPlayerHealth = maxPlayerHealth;
+		hp = GetComponent<HealthPool>();
+		hp.currentHealth = hp.maxHealth;
 		deathScreen = (GameObject)Instantiate(Resources.Load("DeathScreen"), new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
 	}
 
 	void FixedUpdate() {
-		roll();
+		
+		
+		
 		if(!isDead && !isRolling) {
 			sprint();
 			move();
@@ -89,8 +99,12 @@ public class PlayerController : MonoBehaviour {
 	void Update()
     {
 
+    	if(!isDead) {
+			roll();
+		}
     	if(!isDead && !isRolling) {
     		jump();
+    		shoot();
 			
     	}
     	capMaxVelocity();
@@ -98,19 +112,62 @@ public class PlayerController : MonoBehaviour {
 		respawn();
 		
     }
-    public void roll() {
-    	if(Input.GetKey("space") && currentRollTime <= 0) {
-    		currentRollTime = rollTime;
-    		isRolling = true;
-    	}
-    	if(isRolling) {
+    /**
+     * Shoots a projectile from the projectile shooter.
+     */
+    public void shoot() {
 
-    		transform.position = new Vector3(transform.position.x + 0.1f, transform.position.y, -1); 
+    	if(Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
+
+    		weapon.xDirection = direction;
+
+    		if((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
+
+    			weapon.xOffset *= -1;
+    		}
+    		Debug.Log(weapon.xOffset);
+    		weapon.createProjectile();
+    		weapon.currentTimeInterval = weapon.timeInterval;
+    	}
+    	else {
+    		weapon.currentTimeInterval -= Time.deltaTime;  
+    	}
+    	
+    }
+    public void roll() {
+
+    	if(Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
+    		currentRollTime = rollTime;
+    		currentRollDelay = rollDelay;
+    		isRolling = true;
+
+	    	if(Input.GetKey("left")) {
+	    		direction = -1;
+	    	}
+	    	if(Input.GetKey("right")) {
+	    		direction = 1;
+	    	}
+    	}
+    	else if(isRolling && direction != 0) {
+
+    		speed = currentRollTime * direction * rollSpeedMultiplier;
+
+    		if(isTouchingLeftWall() && direction == -1) {
+    			speed = 0;
+    		}
+    		if(isTouchingRightWall() && direction == 1) {
+    			speed = 0;
+    		}
+
+    		transform.position = new Vector3(transform.position.x + speed, transform.position.y, -1); 
 
     		currentRollTime -= Time.deltaTime;
     		if(currentRollTime <= 0) {
     			isRolling = false;
     		}
+    	}
+    	else {
+    		currentRollDelay -= Time.deltaTime;
     	}
     }
     /**
@@ -118,7 +175,9 @@ public class PlayerController : MonoBehaviour {
      */
     public void move() {
     	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
+    		direction = -1;
     		if(speed > 0) {
+    			
     			speed = speed/10;
     		}
     		speed = speed - acceleration * Time.deltaTime * currentSprintMultiplier;
@@ -128,6 +187,7 @@ public class PlayerController : MonoBehaviour {
     		}
     	}
     	else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier))) {
+    		direction = 1;
     		if(speed < 0) {
     			speed = speed/10;
     		}
@@ -160,14 +220,11 @@ public class PlayerController : MonoBehaviour {
     /**
      * Recieve damage. Although current design is that everything is one hit kill, the infastructure for a more gradual system is still in place.
      */
-	public void takeDamage(int dmg) {
-		currentPlayerHealth -= dmg;
-	}
 	/**
 	 * Handles the character's death upon currentPlayerHealth reaching 0. 
 	 */
 	void die() {
-		if(currentPlayerHealth <= 0) {
+		if(hp.currentHealth <= 0) {
 
 
 			isDead = true;
@@ -202,7 +259,7 @@ public class PlayerController : MonoBehaviour {
 				this.GetComponent<Renderer>().enabled = true; 
 				
 				deathScreen.GetComponent<Renderer>().enabled = false;
-				currentPlayerHealth = maxPlayerHealth; 
+				hp.currentHealth = hp.maxHealth;
 				Debug.Log("Save Point" + saveLocation);
 				Debug.Log("Player Position: " + transform.position);
 			}

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114000012327057028}
   m_Layer: 0
   m_Name: EnergyBallShooter
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,10 @@ MonoBehaviour:
   yDirection: 0
   xVelocity: 2
   yVelocity: 0
+  xOffset: 0
+  yOffset: 0
   projectileName: EnergyBallSingle
+  autoSpawnProjectiles: 1
 --- !u!212 &212000011876810664
 SpriteRenderer:
   m_ObjectHideFlags: 1

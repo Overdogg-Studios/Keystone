@@ -22,9 +22,9 @@ GameObject:
   - component: {fileID: 114000010116514894}
   - component: {fileID: 50000013029237658}
   - component: {fileID: 58000013706035350}
-  - component: {fileID: 212000014241577236}
   - component: {fileID: 95000010651798284}
   - component: {fileID: 114000011053585572}
+  - component: {fileID: 212122888037500150}
   m_Layer: 0
   m_Name: EnergyBall
   m_TagString: Untagged
@@ -88,7 +88,7 @@ Animator:
   m_GameObject: {fileID: 1000011394337266}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b3e4420ca48b0024d8793c921a9f684c, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0648c0b0f39fc2f4984f8ebcefa9483c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   travelTime: 0
-  time_passed: 0
+  timePassed: 0
   xDirection: 1
   yDirection: 0
   xVelocity: 1
@@ -125,7 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 100
---- !u!212 &212000014241577236
+  isEnemy: 1
+--- !u!212 &212122888037500150
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

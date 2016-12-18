@@ -53,19 +53,17 @@
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\PixelPerfectCamera.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\PixelSnap.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\Scroller.cs" />
-     <Compile Include="Assets\Scripts\Enemies\Hazard.cs" />
-     <Compile Include="Assets\Scripts\Enemies\Projectile.cs" />
-     <Compile Include="Assets\Scripts\Enemies\ProjectileShooter.cs" />
-     <Compile Include="Assets\Scripts\Game\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Game\SavePoint.cs" />
-     <Compile Include="Assets\Scripts\Game\SceneLoader.cs" />
+     <Compile Include="Assets\Scripts\Engine\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Engine\Hazard.cs" />
+     <Compile Include="Assets\Scripts\Engine\HealthPool.cs" />
+     <Compile Include="Assets\Scripts\Engine\Projectile.cs" />
+     <Compile Include="Assets\Scripts\Engine\ProjectileShooter.cs" />
+     <Compile Include="Assets\Scripts\Engine\SavePoint.cs" />
+     <Compile Include="Assets\Scripts\Engine\SceneLoader.cs" />
      <Compile Include="Assets\Scripts\Player\ContactPoint.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
      <None Include="Assets\Scripts\Camera\PixelPerfectCamera\background_art_license.txt" />
      <None Include="Assets\Scripts\Camera\PixelPerfectCamera\README.txt" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -80,9 +78,6 @@
  </Reference>
  <Reference Include="UnityEngine.HoloLens">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Purchasing">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.VR">
  <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>

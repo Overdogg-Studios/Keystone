@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Allen
   - Background
+  - Destructible
+  - Enemy
   layers:
   - Default
   - TransparentFX
