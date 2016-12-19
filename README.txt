@@ -29,12 +29,6 @@ Quit        [ESC]
 
 Changelog
 ════════════════════════════════════════════════════════════════════════════════
-	
-November 25, 2016 (No Build)
-═════════════════════════════════════════
-- Added Smart Camera System
-- Player now stops increasing in altitude upon colliding with a ceiling. Because the jump height is relative to an initial force + the time spent holding the jump key, the player could continue to hold jump after colliding with a ceiling and maintain that momentum of their jump after sliding out from beneath a ceiling or platform.
-- Character jump height and speed slightly adjusted.
 
 November 3, 2016 (Build 2)
 ═════════════════════════════════════════
