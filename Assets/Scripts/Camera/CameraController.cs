@@ -44,9 +44,12 @@ public class CameraController : MonoBehaviour {
 		pos.x = Mathf.Clamp(pos.x, leftBound, rightBound);
 		pos.y = Mathf.Clamp(pos.y, bottomBound, topBound);
 		transform.position = pos;
+<<<<<<< HEAD
 
 
         //Vector3 toadd = new Vector3(pos.x / 3, pos.y / 3, 1);
         //GameObject.Find("Ghost").transform.position = toadd;
+=======
+>>>>>>> origin/master
     }
 }
