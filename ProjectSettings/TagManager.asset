@@ -8,6 +8,7 @@ TagManager:
   - Background
   - Destructible
   - Enemy
+  - Ground
   layers:
   - Default
   - TransparentFX
