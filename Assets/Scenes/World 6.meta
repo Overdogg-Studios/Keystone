@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 7091c97cee498d344b2d081623fb3e1c
 folderAsset: yes
 timeCreated: 1482371361
+=======
+guid: 585ae70b68746d7488ca2e517c93d598
+folderAsset: yes
+timeCreated: 1480803856
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
 licenseType: Free
 DefaultImporter:
   userData: 

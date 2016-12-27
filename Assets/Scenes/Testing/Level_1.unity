@@ -2574,10 +2574,14 @@ Prefab:
     - target: {fileID: 4000011609782750, guid: 31c48b9da5e7c274db832ba047ee4c0f, type: 2}
       propertyPath: m_RootOrder
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: 4
 =======
       value: 6
 >>>>>>> origin/master
+=======
+      value: 4
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
       objectReference: {fileID: 0}
     - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
@@ -2587,7 +2591,11 @@ Prefab:
     - target: {fileID: 20000014131780338, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
       propertyPath: orthographic size
+<<<<<<< HEAD
       value: 2.885
+=======
+      value: 2.8400002
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
       objectReference: {fileID: 0}
     - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
@@ -2995,10 +3003,14 @@ Prefab:
     - target: {fileID: 4000011372714102, guid: c1ad4bb6692e1ed4cacd6c175c652976, type: 2}
       propertyPath: m_RootOrder
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: 1
 =======
       value: 9
 >>>>>>> origin/master
+=======
+      value: 7
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
       objectReference: {fileID: 0}
     - target: {fileID: 61000010325879988, guid: c1ad4bb6692e1ed4cacd6c175c652976,
         type: 2}
@@ -7403,7 +7415,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000012714292334, guid: b636df57202fde9498e227df8cd5d51d, type: 2}
       propertyPath: m_RootOrder
+<<<<<<< HEAD
       value: 7
+=======
+      value: 5
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
       objectReference: {fileID: 0}
     - target: {fileID: 61000010021694208, guid: b636df57202fde9498e227df8cd5d51d,
         type: 2}
@@ -7613,10 +7629,14 @@ Prefab:
     - target: {fileID: 4000011494558026, guid: 1934b194f52743648a77ebf74786d31c, type: 2}
       propertyPath: m_RootOrder
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: 8
 =======
       value: 11
 >>>>>>> origin/master
+=======
+      value: 9
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1934b194f52743648a77ebf74786d31c, type: 2}
@@ -8102,6 +8122,7 @@ Prefab:
   m_ParentPrefab: {fileID: 100100000, guid: 19b843d2618ad7544a3cf86b3e4ab50a, type: 2}
   m_IsPrefabParent: 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 --- !u!1 &737965145 stripped
 GameObject:
@@ -8123,6 +8144,8 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.32000008, y: 0.020000005}
 >>>>>>> origin/master
+=======
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
 --- !u!1001 &740297021
 Prefab:
   m_ObjectHideFlags: 0
@@ -16878,10 +16901,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_RootOrder: 5
 =======
   m_RootOrder: 8
 >>>>>>> origin/master
+=======
+  m_RootOrder: 6
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1562586761
 Prefab:
@@ -18511,10 +18538,14 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_RootOrder: 6
 =======
   m_RootOrder: 10
 >>>>>>> origin/master
+=======
+  m_RootOrder: 8
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1716623212
 MonoBehaviour:

@@ -45,6 +45,7 @@ public class CameraController : MonoBehaviour {
 		pos.y = Mathf.Clamp(pos.y, bottomBound, topBound);
 		transform.position = pos;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
         //Vector3 toadd = new Vector3(pos.x / 3, pos.y / 3, 1);
@@ -52,4 +53,7 @@ public class CameraController : MonoBehaviour {
 =======
 >>>>>>> origin/master
     }
+=======
+	}
+>>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
 }
