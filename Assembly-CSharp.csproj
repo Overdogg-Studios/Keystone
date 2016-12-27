@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Camera\BackgroundImage.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\CanvasScreenSpaceScaler.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\CanvasWorldScaler.cs" />
@@ -53,6 +54,10 @@
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\PixelPerfectCamera.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\PixelSnap.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\Scroller.cs" />
+     <Compile Include="Assets\Scripts\Enemies\Sensors\Arrow.cs" />
+     <Compile Include="Assets\Scripts\Enemies\Sensors\ArrowLauncher.cs" />
+     <Compile Include="Assets\Scripts\Enemies\Sensors\Laser.cs" />
+     <Compile Include="Assets\Scripts\Enemies\Sensors\LaserSensor.cs" />
      <Compile Include="Assets\Scripts\Engine\GameManager.cs" />
      <Compile Include="Assets\Scripts\Engine\Hazard.cs" />
      <Compile Include="Assets\Scripts\Engine\HealthPool.cs" />
