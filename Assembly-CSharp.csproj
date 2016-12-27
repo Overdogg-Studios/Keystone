@@ -46,7 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera\BackgroundImage.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraController.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\CanvasScreenSpaceScaler.cs" />
      <Compile Include="Assets\Scripts\Camera\PixelPerfectCamera\Scripts\CanvasWorldScaler.cs" />

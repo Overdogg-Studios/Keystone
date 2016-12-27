@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
 	public float vertExtent;
 	public float horzExtent;
 	public Vector3 pos;
-	public Transform target;
+	private Transform target;
 	private BoxCollider2D levelBounds;
 
 	// Use this for initialization
@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour {
 	 float vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 	 float horzExtent = vertExtent * Screen.width / Screen.height;
 
-	 levelBounds = GameObject.Find("Level Bounds").GetComponentInChildren<BoxCollider2D>();
+	 levelBounds = GameObject.Find("Background").GetComponentInChildren<BoxCollider2D>();
 
 	 target = GameObject.Find("Player").transform;
 
@@ -39,21 +39,10 @@ public class CameraController : MonoBehaviour {
 	{
 
 		//Debug.Log(leftBound);
-		pos = new Vector3(target.position.x, target.position.y, transform.position.z);
+		var pos = new Vector3(target.position.x, target.position.y, transform.position.z);
 
 		pos.x = Mathf.Clamp(pos.x, leftBound, rightBound);
 		pos.y = Mathf.Clamp(pos.y, bottomBound, topBound);
 		transform.position = pos;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-        //Vector3 toadd = new Vector3(pos.x / 3, pos.y / 3, 1);
-        //GameObject.Find("Ghost").transform.position = toadd;
-=======
->>>>>>> origin/master
     }
-=======
-	}
->>>>>>> parent of ef4fe8d... Added a test version of parallax scrolling
 }
