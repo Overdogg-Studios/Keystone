@@ -126,6 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 100
   isEnemy: 1
+  isActive: 1
 --- !u!212 &212122888037500150
 SpriteRenderer:
   m_ObjectHideFlags: 1

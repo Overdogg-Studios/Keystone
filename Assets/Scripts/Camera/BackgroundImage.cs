@@ -22,8 +22,7 @@ public class BackgroundImage : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-
-		Debug.Log(transform.position.z);
+		
 		Vector3 newPosition = new Vector3(initialXPosition + (camera.pos.x / transform.position.z), initialYPosition + (camera.pos.y / transform.position.z) , transform.position.z);
        	transform.position = newPosition;
 	}

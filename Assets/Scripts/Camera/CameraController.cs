@@ -37,8 +37,6 @@ public class CameraController : MonoBehaviour {
 
 	void Update () 
 	{
-
-		//Debug.Log(leftBound);
 		pos = new Vector3(target.position.x, target.position.y, transform.position.z);
 
 		pos.x = Mathf.Clamp(pos.x, leftBound, rightBound);

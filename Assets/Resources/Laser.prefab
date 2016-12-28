@@ -21,7 +21,8 @@ GameObject:
   - component: {fileID: 4870146694354842}
   - component: {fileID: 212221158608926638}
   - component: {fileID: 114203613674156462}
-  - component: {fileID: 61578688616359692}
+  - component: {fileID: 114642416859784536}
+  - component: {fileID: 61000064937161618}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -35,14 +36,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1424981132436968}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.275, y: 0.216, z: 0}
+  m_LocalScale: {x: 0.68, y: 0.68, z: 0.6666667}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61578688616359692
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!61 &61000064937161618
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -53,9 +54,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.00000023841858, y: 0}
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.02}
+  m_Size: {x: 0.32000008, y: 0.020000005}
 --- !u!114 &114203613674156462
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -67,13 +68,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24a0c134ea1b0c94c901edb2f761f399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  isEnemy: 0
+  damage: 10
+  isEnemy: 1
   isActivated: 0
-  timeInterval: 0
-  onTimeLength: 0
+  timeInterval: 5
+  onTimeLength: 3
   LaserOff: {fileID: 21300000, guid: b43c4946a921ff5439503f3817d83883, type: 3}
   LaserOn: {fileID: 21300000, guid: b5f357f79dd444549a44e32ec3c73466, type: 3}
+--- !u!114 &114642416859784536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1424981132436968}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b98967f74fe63a4db74368449ce8a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 100
+  isEnemy: 1
+  isActive: 0
 --- !u!212 &212221158608926638
 SpriteRenderer:
   m_ObjectHideFlags: 1
