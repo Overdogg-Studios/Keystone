@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
 	public float vertExtent;
 	public float horzExtent;
 	public Vector3 pos;
-	private Transform target;
+	public Transform target;
 	private BoxCollider2D levelBounds;
 
 	// Use this for initialization
@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour {
 	 float vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 	 float horzExtent = vertExtent * Screen.width / Screen.height;
 
-	 levelBounds = GameObject.Find("Background").GetComponentInChildren<BoxCollider2D>();
+	 levelBounds = GameObject.Find("Level Bounds").GetComponentInChildren<BoxCollider2D>();
 
 	 target = GameObject.Find("Player").transform;
 
@@ -37,9 +37,7 @@ public class CameraController : MonoBehaviour {
 
 	void Update () 
 	{
-
-		//Debug.Log(leftBound);
-		var pos = new Vector3(target.position.x, target.position.y, transform.position.z);
+		pos = new Vector3(target.position.x, target.position.y, transform.position.z);
 
 		pos.x = Mathf.Clamp(pos.x, leftBound, rightBound);
 		pos.y = Mathf.Clamp(pos.y, bottomBound, topBound);

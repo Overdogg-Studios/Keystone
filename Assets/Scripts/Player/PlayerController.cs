@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour {
 
 	public float rollTime;
 	public float rollDelay; //How long a player has to wait before they can roll again.
-	public float rollSpeedMultiplier;
+	public float rollSpeedMultiplier; //Multiplier that determines how 
 	private float currentRollTime;
 	private float currentRollDelay;
 	private bool isRolling;
@@ -125,7 +125,6 @@ public class PlayerController : MonoBehaviour {
 
     			weapon.xOffset *= -1;
     		}
-    		Debug.Log(weapon.xOffset);
     		weapon.createProjectile();
     		weapon.currentTimeInterval = weapon.timeInterval;
     	}
@@ -260,8 +259,6 @@ public class PlayerController : MonoBehaviour {
 				
 				deathScreen.GetComponent<Renderer>().enabled = false;
 				hp.currentHealth = hp.maxHealth;
-				Debug.Log("Save Point" + saveLocation);
-				Debug.Log("Player Position: " + transform.position);
 			}
 			//Otherwise just reload the level.
 			else {
