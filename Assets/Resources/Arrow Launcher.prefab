@@ -20,8 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4666842452283250}
   - component: {fileID: 212971656459198534}
-  - component: {fileID: 61845995067186086}
-  - component: {fileID: 114887639465873050}
+  - component: {fileID: 61911028115315536}
+  - component: {fileID: 114903410948972346}
+  - component: {fileID: 114234884165924742}
   m_Layer: 0
   m_Name: Arrow Launcher
   m_TagString: Untagged
@@ -36,13 +37,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1123982108527848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -9.54, y: -3.87, z: 0}
+  m_LocalScale: {x: 1.9525458, y: 1.769365, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61845995067186086
+--- !u!61 &61911028115315536
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -53,10 +54,10 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.80131483, y: 0.18262197}
   serializedVersion: 2
-  m_Size: {x: 5, y: 2}
---- !u!114 &114887639465873050
+  m_Size: {x: 1.9226327, y: 0.68524396}
+--- !u!114 &114234884165924742
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -64,14 +65,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1123982108527848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec136266704996944b93089dd3e0a06d, type: 3}
+  m_Script: {fileID: 11500000, guid: 13d646e6d95c6c347a149a757049a23a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isEnemy: 0
-  arrowName: 
-  airTime: 0
-  damage: 0
-  timeBetweenShots: 0
+  isEnemy: 1
+  arrowName: Arrow
+  airTime: 20
+  timeBetweenShots: 1
+--- !u!114 &114903410948972346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123982108527848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b7230e8fc71094fbbf9a3376507f9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 1
+  isEnemy: 1
+  playerDetected: 0
 --- !u!212 &212971656459198534
 SpriteRenderer:
   m_ObjectHideFlags: 1
