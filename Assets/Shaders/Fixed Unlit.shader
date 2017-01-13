@@ -37,17 +37,13 @@
 				}
 				fixed4 frag(v2f IN) : COLOR
 				{
-					float brightness = 1;
-					fixed3 diffuse = brightness * _LightColor0;
-					fixed3 lightDirection = -normalize(_WorldSpaceLightPos0);
-					fixed3 relfectedLightDirection = reflect(lightDirection, fixed3(0, 0, 1));
 
 					fixed4 texColor = tex2D(_MainTex,IN.texcoord);
-					if (texColor.a < 0.7)
+					if (texColor.a < 0.7 || (texColor.r == 91/255 && texColor.g == 185/255 && texColor.b == 151/255 && texColor.a == 1))
 					{
 						discard;
 					}
-					return fixed4(diffuse,1) * texColor + fixed4(relfectedLightDirection,1);
+					return texColor;
 					//return _Color;
 				}
 			ENDCG
