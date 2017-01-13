@@ -14,7 +14,7 @@ An extremely tough 2D Precision Platformer and Shooter for PC/Mac/Linux.
 
 Keystone is an an educational project designed to enable us at Overdogg Productions to develop the skills necessary to design and publish a complete game. For information about us or the game, please check out our Github wiki.
 
-Check out OverdoggProductions.tumblr.com for regular updates concering Keystone development.
+Check out http://overdoggproductions.tumblr.com/ for regular updates concering Keystone development.
 
 Join our discord over at https://discordapp.com/invite/GkfYckY to check out what we're currently working on and learn about the game development process.
 
