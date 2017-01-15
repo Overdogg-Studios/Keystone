@@ -42,7 +42,7 @@
 					texColor.g = 0;
 					texColor.b = 0;
 				}
-				else if (texColor.a == 1 && texColor.r * 255 == 233 && texColor.g * 255 == 233 && texColor.b * 255 == 233)
+				else if (texColor.a == 1 && ((texColor.r * 255 == 233 && texColor.g * 255 == 233 && texColor.b * 255 == 233) || (texColor.r * 255 == 232 && texColor.g * 255 == 232 && texColor.b * 255 == 232) || (texColor.r * 255 == 234 && texColor.g * 255 == 234 && texColor.b * 255 == 234)))
 				{
 					//texColor.r = 1;
 					texColor.g = 1 - texColor.g;
@@ -67,6 +67,10 @@
 					texColor.b = 1 - texColor.b;
 				}
 				else if (texColor.a == 1 && ((texColor.r * 255 == 91 && texColor.g * 255 == 185 && texColor.b * 255 == 151) || (texColor.r * 255 == 92 && texColor.g * 255 == 186 && texColor.b * 255 == 152) || (texColor.r * 255 == 90 && texColor.g * 255 == 184 && texColor.b * 255 == 150)))
+				{
+					discard;
+				}
+				else if (texColor.a == 0 && texColor.r == 1 && texColor.g == 1 && texColor.b == 1)
 				{
 					discard;
 				}
