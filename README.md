@@ -1,6 +1,6 @@
 ## Overdogg Studios presents
 
-![Alt text](https://lh5.googleusercontent.com/t-00R8rAeJaLHb0zHQDH3RNV_eQ9W9iHibJ2YMWmnJ5cmCR3sVMUf6gAyrEtWleEXp68wZXKP0CLVFs=w1920-h943)
+![Alt text](http://i.imgur.com/lo2XUht.png)
 
 
                                           
