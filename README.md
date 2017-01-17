@@ -1,6 +1,7 @@
 Overdogg Studios presents
 
-![Alt text](https://lh3.googleusercontent.com/w-B4-pVN1s7RzpNqE4SOMjG7rg9H3HwNIk3g2oLslL7Yl9h0QcyxPf3QHX5ddVIlHrf_sbK8IdZut_o=w1920-h943)
+![Alt text](https://lh6.googleusercontent.com/STJ8H5ZX98giylitHMJZcBW9x9IBsMRUiV9DMXu17zA0tWc3UL7UZfCDjc8Qcx2l0n3Nv_XQSLb3Nxs=w1920-h943)
+
 
                                           
 An extremely tough 2D Precision Platformer and Shooter for PC/Mac/Linux.
