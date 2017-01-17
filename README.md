@@ -1,6 +1,6 @@
 ## Overdogg Studios presents
 
-![Alt text](http://i.imgur.com/lo2XUht.png)
+![Alt text](http://i.imgur.com/opMyNKE.png)
 
 
                                           
