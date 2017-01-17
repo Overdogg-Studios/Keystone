@@ -26,7 +26,7 @@ ___
 |Quit        | ESC|
 
 ### Changelog
-
+___
 November 3, 2016 (Build 2)
 - Added animated projectiles to the game. Projectiles can travel in any linear direction at any speed.
 - Added projectile spawners that can shoot projectiles at any given rate.
