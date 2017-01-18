@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Projectiles\LaserSensor.cs" />
     <Compile Include="Assets\Scripts\Projectiles\Projectile.cs" />
     <Compile Include="Assets\Scripts\Projectiles\ProjectileShooter.cs" />
+    <Compile Include="Assets\SkinTone.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Camera\PixelPerfectCamera\README.txt" />

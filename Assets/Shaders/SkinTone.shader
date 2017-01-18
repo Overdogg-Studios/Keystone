@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		_Color("Skin Color", Color) = (0,0,0,1)
+		_Color("Skin", Color) = (0,0,0,1)
 		_MainTex ("Texture", 2D) = "white" {}
 	}
 	SubShader

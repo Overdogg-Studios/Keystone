@@ -2545,7 +2545,7 @@ Prefab:
     - target: {fileID: 20000014131780338, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
       propertyPath: orthographic size
-      value: 2.77
+      value: 1.965
       objectReference: {fileID: 0}
     - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
@@ -9077,6 +9077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 865253868}
   - component: {fileID: 865253867}
+  - component: {fileID: 865253869}
   m_Layer: 0
   m_Name: stand
   m_TagString: Untagged
@@ -9132,6 +9133,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &865253869
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 865253866}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ed8071d5b231b846954513220844c01, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!4 &866046087 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000014186550402, guid: 67b979cf388c60e4593d1eb5a748cbfc,
@@ -9956,23 +9974,6 @@ MonoBehaviour:
   yOffset: 0
   projectileName: Bullet
   autoSpawnProjectiles: 0
---- !u!95 &933406487
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 933406479}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 23920c0d02ed13846a6e46f8c7a088a1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &933406488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9986,6 +9987,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+--- !u!114 &933406489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 933406479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 825bd328ad00edf4094893152c97621e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinColor: {r: 0.6691177, g: 0.24599914, b: 0.24599914, a: 0}
 --- !u!1001 &935770101
 Prefab:
   m_ObjectHideFlags: 0
@@ -17245,6 +17258,93 @@ Prefab:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 212000010907288678, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9d1228d9c05f66246895c0bbd52ee300,
+        type: 3}
+    - target: {fileID: 212000010907288678, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 20b8c0763f0933c4fb293372e3642e63, type: 2}
+    - target: {fileID: 212000010907288678, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 212000010907288678, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: jogClip
+      value: 
+      objectReference: {fileID: 7400000, guid: d10a03eba265ed945bb0cb7e910eed4b, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: jumpClip
+      value: 
+      objectReference: {fileID: 7400000, guid: a60fbff4003145d4d9961c66b8f7c0b0, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: landClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 90d0132f774c113409bcf96a3986da9f, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: sprintClip
+      value: 
+      objectReference: {fileID: 7400000, guid: f4613d9a5a9e15f44a1a86dd7f830928, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: rollClip
+      value: 
+      objectReference: {fileID: 7400000, guid: 60e5155a86c5bbd4d8b0f2b937d9708b, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: standClip
+      value: 
+      objectReference: {fileID: 7400000, guid: f3dcdb148bfa64743a8c5a221d9cea11, type: 2}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: jumpSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bbb6dc9e409a8484eadcd3d588307965,
+        type: 3}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: landSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5879c9e5481e6664a9d3c0d5e1afa4d5,
+        type: 3}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: sprintSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4fdad4561d6235147b0c2ed64cf28574,
+        type: 3}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: jogSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f0425e083ed39ae4cb245f371cfb2b2b,
+        type: 3}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: rollSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9a625970543013245bf0cb68757a0430,
+        type: 3}
+    - target: {fileID: 114000012979927740, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: standSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9d1228d9c05f66246895c0bbd52ee300,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47d2077c10d74ba48ab2162ca5362a2f, type: 2}
   m_IsPrefabParent: 0
@@ -20132,6 +20232,7 @@ GameObject:
   - component: {fileID: 1881258218}
   - component: {fileID: 1881258217}
   - component: {fileID: 1881258216}
+  - component: {fileID: 1881258219}
   m_Layer: 0
   m_Name: sprint
   m_TagString: Untagged
@@ -20204,6 +20305,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1881258219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1881258215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 825bd328ad00edf4094893152c97621e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skinColor: {r: 0.24137926, g: 1, b: 0, a: 0}
 --- !u!1001 &1890931032
 Prefab:
   m_ObjectHideFlags: 0
