@@ -1,7 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keystone", "Keystone.csproj", "{507EDBA8-87FA-3355-139A-738D248ED333}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{1CE2096C-300F-78BB-B838-9CA2603E6DD9}") = "Keystone", "Assembly-CSharp.csproj", "{EF0B2179-1916-5BFF-9A8B-52CE0BE6005D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +9,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{507EDBA8-87FA-3355-139A-738D248ED333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{507EDBA8-87FA-3355-139A-738D248ED333}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{507EDBA8-87FA-3355-139A-738D248ED333}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{507EDBA8-87FA-3355-139A-738D248ED333}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF0B2179-1916-5BFF-9A8B-52CE0BE6005D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF0B2179-1916-5BFF-9A8B-52CE0BE6005D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF0B2179-1916-5BFF-9A8B-52CE0BE6005D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF0B2179-1916-5BFF-9A8B-52CE0BE6005D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal
