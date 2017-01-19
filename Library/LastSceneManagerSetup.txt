@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Testing/Level_1.unity
+- path: Assets/Scenes/Testing/CraigTest.unity
   isLoaded: 1
   isActive: 1
