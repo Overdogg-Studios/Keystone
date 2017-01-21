@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour {
 	public Transform centerLeftSidePoint;
 	public Transform bottomLeftSidePoint;
 
+
+
 	//How large the contact points are.
 	private float radiusOfContactPoints = ContactPoint.radius;
 	
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour {
 	public CameraController mainCamera;
 
 	Rigidbody2D rb2D;  
+	Animator animator;
 	// Use this for initialization
 	void Start () {
 
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour {
 		hp = GetComponent<HealthPool>();
 		hp.currentHealth = hp.maxHealth;
 		deathScreen = (GameObject)Instantiate(Resources.Load("DeathScreen"), new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+		animator = GetComponent<Animator>();
 	}
 
 	void FixedUpdate() {
@@ -100,6 +104,7 @@ public class PlayerController : MonoBehaviour {
     {
 
     	if(!isDead) {
+    		flipSprite();
 			roll();
 		}
     	if(!isDead && !isRolling) {
@@ -111,6 +116,14 @@ public class PlayerController : MonoBehaviour {
 		die();
 		respawn();
 		
+    }
+    public void flipSprite() {
+    	if(direction == 1) {
+    		this.GetComponent<SpriteRenderer>().flipX = false;
+    	}
+    	if(direction == -1) {
+    		this.GetComponent<SpriteRenderer>().flipX = true;
+    	}
     }
     /**
      * Shoots a projectile from the projectile shooter.
@@ -139,6 +152,7 @@ public class PlayerController : MonoBehaviour {
     		currentRollTime = rollTime;
     		currentRollDelay = rollDelay;
     		isRolling = true;
+    		animator.SetInteger("State", 3);
 
 	    	if(Input.GetKey("left")) {
 	    		direction = -1;
@@ -174,6 +188,10 @@ public class PlayerController : MonoBehaviour {
      */
     public void move() {
     	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
+    		if(animator.GetInteger("State") != 1) {
+    			animator.SetInteger("State", 4);
+    		}
+    		
     		direction = -1;
     		if(speed > 0) {
     			
@@ -186,6 +204,9 @@ public class PlayerController : MonoBehaviour {
     		}
     	}
     	else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier))) {
+    		if(animator.GetInteger("State") != 1) {
+    			animator.SetInteger("State", 4);
+    		}
     		direction = 1;
     		if(speed < 0) {
     			speed = speed/10;
@@ -198,6 +219,7 @@ public class PlayerController : MonoBehaviour {
 
     	}
     	else {
+    		animator.SetInteger("State", 0);
     		if(speed > deceleration * Time.deltaTime) {
     			speed = speed - deceleration * Time.deltaTime * currentSprintMultiplier;
     		}
@@ -308,9 +330,11 @@ public class PlayerController : MonoBehaviour {
 	public void sprint() {
 		if (Input.GetKey("left shift")) {
 			currentSprintMultiplier = sprintMultiplier;
+			animator.SetInteger("State", 1);
 		}
 		else {
 			currentSprintMultiplier = 1;
+			//animator.SetInteger("State", 0);
 		}
 	}
 	/**
@@ -326,9 +350,9 @@ public class PlayerController : MonoBehaviour {
 	 */
 	public void jump() {
 
-
 		if(Input.GetKeyDown(KeyCode.E) )
         {
+        	
             if(isGrounded())
             {	
                 rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
@@ -349,6 +373,7 @@ public class PlayerController : MonoBehaviour {
         //if you keep holding down the jump button...
         if((Input.GetKey(KeyCode.E)) && !stoppedJumping)
         {
+        	//animator.SetInteger("State", 2);
             //and your counter hasn't reached zero...
             if(jumpTimeCounter > 0)
             {
@@ -387,6 +412,7 @@ public class PlayerController : MonoBehaviour {
 			jumpTimeCounter = jumpTime;
 			doubleJumpTimeCounter = doubleJumpTime;
 			canDoubleJump = true;
+			//animator.SetInteger("State", 5);
 		}
 		if (isTouchingCeiling()) {
 			rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
