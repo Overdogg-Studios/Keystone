@@ -272,4 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4a418ae7ba55f64baa6c49a06718755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skinColor: {r: 0.7352941, g: 0.22707611, b: 0.22707611, a: 0}
+  skinColor: {r: 1, g: 0, b: 0, a: 0}
+  bootColor: {r: 0.040873695, g: 0.19551393, b: 0.39705884, a: 0}
+  hatColor: {r: 0, g: 1, b: 0, a: 0}

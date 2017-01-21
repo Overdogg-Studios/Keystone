@@ -24,4 +24,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing/menu-splashscreen/MainMenu.unity
   - enabled: 1
+    path: Assets/Scenes/Testing/menu-splashscreen/LoadSaveMenu.unity
+  - enabled: 1
     path: Assets/Scenes/Testing/CraigTest.unity
