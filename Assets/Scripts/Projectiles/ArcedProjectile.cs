@@ -8,15 +8,15 @@ class ArcedProjectile : MonoBehaviour
 {
 
     private PlayerController allen;
-    private Vector3 destination;
-    private float airTime;
+    //private Vector3 destination;
+    //private float airTime;
     private bool fired;
-    private float currentTime;
+    //private float currentTime;
     private float timeExisted;
     
     void Start()
     {
-        currentTime = 0.0f;
+        //currentTime = 0.0f;
     }
 
     void FixedUpdate()
@@ -33,8 +33,8 @@ class ArcedProjectile : MonoBehaviour
 
     public void fire(float airTime, Vector3 destination)
     {
-        this.airTime = airTime;
-        this.destination = destination;
+        //this.airTime = airTime;
+        //this.destination = destination;
     }
     //Note Grabbed off of http://answers.unity3d.com/questions/248788/calculating-ball-trajectory-in-full-3d-world.html
     private Vector3 calculateBestThrowSpeed(Vector3 origin, Vector3 target, float timeToTarget)

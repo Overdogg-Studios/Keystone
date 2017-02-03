@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -14,12 +15,13 @@ public class PlayerController : MonoBehaviour {
 	private float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
 	private float direction; //Which way the player is traveling. 1 for right, -1 for left.
 
+	//M
 	private const float LEFT = -1;
 	private const float RIGHT = 1;
 
-	public float rollTime;
+	public float rollTime; //How long the player's roll lasts.
 	public float rollDelay; //How long a player has to wait before they can roll again.
-	public float rollSpeedMultiplier; //Multiplier that determines how 
+	public float rollSpeedMultiplier; //Multiplier that determines how much the roll's speed is multiplied by.
 	private float currentRollTime;
 	private float currentRollDelay;
 	private bool isRolling;
@@ -80,7 +82,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		direction = 1;
+		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
 		currentSprintMultiplier = 1;
         jumpTimeCounter = jumpTime;
@@ -118,10 +120,10 @@ public class PlayerController : MonoBehaviour {
 		
     }
     public void flipSprite() {
-    	if(direction == 1) {
+    	if(direction == RIGHT) {
     		this.GetComponent<SpriteRenderer>().flipX = false;
     	}
-    	if(direction == -1) {
+    	if(direction == LEFT) {
     		this.GetComponent<SpriteRenderer>().flipX = true;
     	}
     }
@@ -136,7 +138,7 @@ public class PlayerController : MonoBehaviour {
 
     		if((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
 
-    			weapon.xOffset *= -1;
+    			weapon.xOffset *= LEFT;
     		}
     		weapon.createProjectile();
     		weapon.currentTimeInterval = weapon.timeInterval;
@@ -155,20 +157,20 @@ public class PlayerController : MonoBehaviour {
     		animator.SetInteger("State", 3);
 
 	    	if(Input.GetKey("left")) {
-	    		direction = -1;
+	    		direction = LEFT;
 	    	}
 	    	if(Input.GetKey("right")) {
-	    		direction = 1;
+	    		direction = RIGHT;
 	    	}
     	}
     	else if(isRolling && direction != 0) {
 
     		speed = currentRollTime * direction * rollSpeedMultiplier;
 
-    		if(isTouchingLeftWall() && direction == -1) {
+    		if(isTouchingLeftWall() && direction == LEFT) {
     			speed = 0;
     		}
-    		if(isTouchingRightWall() && direction == 1) {
+    		if(isTouchingRightWall() && direction == RIGHT) {
     			speed = 0;
     		}
 
@@ -187,12 +189,19 @@ public class PlayerController : MonoBehaviour {
      * Move the character left and right.
      */
     public void move() {
-    	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
+
+    	if(Input.GetKey("left") || Input.GetKey("right")) {
     		if(animator.GetInteger("State") != 1) {
     			animator.SetInteger("State", 4);
     		}
+    	}
+    	else {
+    		animator.SetInteger("State", 0);
+    	}
+    	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
     		
-    		direction = -1;
+    		
+    		direction = LEFT;
     		if(speed > 0) {
     			
     			speed = speed/10;
@@ -203,11 +212,8 @@ public class PlayerController : MonoBehaviour {
     			speed = 0;
     		}
     	}
-    	else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier))) {
-    		if(animator.GetInteger("State") != 1) {
-    			animator.SetInteger("State", 4);
-    		}
-    		direction = 1;
+    	else if ((Input.GetKey("right")) && (speed > (LEFT * maxSpeed * currentSprintMultiplier))) {
+    		direction = RIGHT;
     		if(speed < 0) {
     			speed = speed/10;
     		}
@@ -219,7 +225,7 @@ public class PlayerController : MonoBehaviour {
 
     	}
     	else {
-    		animator.SetInteger("State", 0);
+    		
     		if(speed > deceleration * Time.deltaTime) {
     			speed = speed - deceleration * Time.deltaTime * currentSprintMultiplier;
     		}
@@ -233,8 +239,8 @@ public class PlayerController : MonoBehaviour {
     	if(speed > maxSpeed * currentSprintMultiplier) {
     		speed = maxSpeed * currentSprintMultiplier;
     	}
-    	if(speed < -1 * maxSpeed * currentSprintMultiplier) {
-    		speed = -1 * maxSpeed * currentSprintMultiplier;
+    	if(speed < LEFT * maxSpeed * currentSprintMultiplier) {
+    		speed = LEFT * maxSpeed * currentSprintMultiplier;
     	}
     	transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, -1); 
     }
@@ -296,9 +302,17 @@ public class PlayerController : MonoBehaviour {
 	 */
 	public bool isGrounded() {
 
-		return Physics2D.OverlapCircle(leftGroundPoint.position, radiusOfContactPoints, groundMask) || 
+		if(Physics2D.OverlapCircle(leftGroundPoint.position, radiusOfContactPoints, groundMask) || 
 		Physics2D.OverlapCircle(rightGroundPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerGroundPoint.position, radiusOfContactPoints, groundMask);
+		Physics2D.OverlapCircle(centerGroundPoint.position, radiusOfContactPoints, groundMask)) {
+			//animator.SetInteger("State", 5);
+			return true;
+
+		}
+		else {
+			return false;
+		}
+		
 	}
 	/**
 	 * Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
@@ -334,7 +348,10 @@ public class PlayerController : MonoBehaviour {
 		}
 		else {
 			currentSprintMultiplier = 1;
-			//animator.SetInteger("State", 0);
+			if(animator.GetInteger("State") != 4) {
+				animator.SetInteger("State", 0);
+			}
+			
 		}
 	}
 	/**
@@ -349,10 +366,9 @@ public class PlayerController : MonoBehaviour {
 	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
 	 */
 	public void jump() {
-
 		if(Input.GetKeyDown(KeyCode.E) )
         {
-        	
+        	//animator.SetInteger("State", 2);
             if(isGrounded())
             {	
                 rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
@@ -363,7 +379,7 @@ public class PlayerController : MonoBehaviour {
             	rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
             	rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
                	stoppedDoubleJumping = false;
-                canDoubleJump = false;
+                 canDoubleJump = false;
 
             }
             else {
@@ -373,7 +389,6 @@ public class PlayerController : MonoBehaviour {
         //if you keep holding down the jump button...
         if((Input.GetKey(KeyCode.E)) && !stoppedJumping)
         {
-        	//animator.SetInteger("State", 2);
             //and your counter hasn't reached zero...
             if(jumpTimeCounter > 0)
             {
@@ -412,7 +427,6 @@ public class PlayerController : MonoBehaviour {
 			jumpTimeCounter = jumpTime;
 			doubleJumpTimeCounter = doubleJumpTime;
 			canDoubleJump = true;
-			//animator.SetInteger("State", 5);
 		}
 		if (isTouchingCeiling()) {
 			rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
