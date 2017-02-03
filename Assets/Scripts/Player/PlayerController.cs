@@ -46,18 +46,13 @@ public class PlayerController : MonoBehaviour {
 	public Transform topLeftSidePoint;
 	public Transform centerLeftSidePoint;
 	public Transform bottomLeftSidePoint;
-
-
-
-	//How large the contact points are.
-	private float radiusOfContactPoints = ContactPoint.radius;
 	
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
 
 	private ProjectileShooter weapon;
 	private HealthPool hp;
-	GameObject deathScreen;
+	
 
 	public SavePoint lastSavePoint;
 
@@ -89,13 +84,10 @@ public class PlayerController : MonoBehaviour {
 		rb2D = GetComponent<Rigidbody2D>();
 		hp = GetComponent<HealthPool>();
 		hp.currentHealth = hp.maxHealth;
-		deathScreen = (GameObject)Instantiate(Resources.Load("DeathScreen"), new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
 		animator = GetComponent<Animator>();
 	}
 
 	void FixedUpdate() {
-		
-		
 		
 		if(!isDead && !isRolling) {
 			sprint();
@@ -258,16 +250,6 @@ public class PlayerController : MonoBehaviour {
 			rb2D.isKinematic = true;
 			rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
-
-
-			//Spawn a DeathScreen object in the exact center of the screen. 
-			mainCamera = GameObject.Find("Camera").GetComponent<CameraController>();
-			Vector3 centerScreen = mainCamera.transform.position;
-			centerScreen.z = -3;
-			deathScreen.transform.position = centerScreen;
-			deathScreen.GetComponent<Renderer>().enabled = true;
-			
-
 		}
 	}
 	void respawn() {
@@ -279,13 +261,9 @@ public class PlayerController : MonoBehaviour {
 
 				isDead = false;
 				rb2D.isKinematic = false;
-
 				Vector3 saveLocation = lastSavePoint.getPosition();
 				transform.position = saveLocation;
-				
 				this.GetComponent<Renderer>().enabled = true; 
-				
-				deathScreen.GetComponent<Renderer>().enabled = false;
 				hp.currentHealth = hp.maxHealth;
 			}
 			//Otherwise just reload the level.
@@ -295,16 +273,15 @@ public class PlayerController : MonoBehaviour {
 			
 		}
 		
-	
 	}
 	/**
 	 * Return whether or not the player's ground points are in contact with anything on the layermask "Ground Mask".
 	 */
 	public bool isGrounded() {
 
-		if(Physics2D.OverlapCircle(leftGroundPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(rightGroundPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerGroundPoint.position, radiusOfContactPoints, groundMask)) {
+		if(Physics2D.OverlapCircle(leftGroundPoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(rightGroundPoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(centerGroundPoint.position, ContactPoint.radius, groundMask)) {
 			//animator.SetInteger("State", 5);
 			return true;
 
@@ -318,25 +295,25 @@ public class PlayerController : MonoBehaviour {
 	 * Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
 	 */
 	public bool isTouchingCeiling() {
-		return Physics2D.OverlapCircle(leftCeilingPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(rightCeilingPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerCeilingPoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapCircle(leftCeilingPoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(rightCeilingPoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(centerCeilingPoint.position, ContactPoint.radius, groundMask);
 	}
 	/**
 	 * Return whether or not the player's right Wall Points are in contact with anything on the layermask "Ground Mask".
 	 */
 	public bool isTouchingRightWall() {
-		return Physics2D.OverlapCircle(topRightSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerRightSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(bottomRightSidePoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapCircle(topRightSidePoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(centerRightSidePoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(bottomRightSidePoint.position, ContactPoint.radius, groundMask);
 	}
 	/**
 	 * Return whether or not the player's left Wall Points are in contact with anything on the layermask "Ground Mask".
 	 */
 	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapCircle(topLeftSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerLeftSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(bottomLeftSidePoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapCircle(topLeftSidePoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(centerLeftSidePoint.position, ContactPoint.radius, groundMask) || 
+		Physics2D.OverlapCircle(bottomLeftSidePoint.position, ContactPoint.radius, groundMask);
 	}
 	/**
 	 * Controls whether or not the player is sprinting. If not sprinting, no additional speed is granted.

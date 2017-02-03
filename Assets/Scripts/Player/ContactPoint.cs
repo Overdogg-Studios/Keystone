@@ -15,6 +15,6 @@ public class ContactPoint : MonoBehaviour {
 	}
 	void OnDrawGizmos () {
 		Gizmos.color = new Color(0.5F, 1F, 0.5F, 1F);
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireCube(transform.position, new Vector3(0.01f, 0.01f, 1));
 	}
 }
