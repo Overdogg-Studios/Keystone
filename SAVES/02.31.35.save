@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<Saveid id="02.31.35" time="02.31.35">
+	<Player id="Craig">
+		<Skin>RED</Skin>
+		<Upgrades>
+			<Upgrade id="Sprint">TRUE</Upgrade>
+		</Upgrades>
+		
+		<Achievements>
+			<Achievement id="Achievement 1">TRUE</Achievement>
+			<Achievement id="Achievement 2">FALSE</Achievement>
+		</Achievements>
+	</Player>
+	
+	<Level id="Level1" status="75%">STARTED-NOT-COMPLETED</Level>
+	<Level id="Level2" status="100%">COMPLETED</Level>
+	<Level id="Level3" status="5%">IN-PROGRESS
+		<Location id="Craig" x="5" y="20"></Location>
+	</Level>
+	<Level id="Level4" status="0%">NOT-STARTED</Level>
+	
+</Saveid>

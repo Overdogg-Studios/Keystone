@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour {
     }
     public void roll() {
 
-    	if(Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
+    	if(Input.GetKeyDown("e") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
     		currentRollTime = rollTime;
     		currentRollDelay = rollDelay;
     		isRolling = true;
@@ -327,7 +327,7 @@ public class PlayerController : MonoBehaviour {
 	public void jump() {
 
 
-		if(Input.GetKeyDown(KeyCode.E) )
+		if(Input.GetKeyDown(KeyCode.Space) )
         {
             if(isGrounded())
             {	
