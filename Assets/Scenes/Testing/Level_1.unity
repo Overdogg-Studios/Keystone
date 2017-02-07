@@ -2545,12 +2545,17 @@ Prefab:
     - target: {fileID: 20000014131780338, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
       propertyPath: orthographic size
-      value: 2.855
+      value: 2.55
       objectReference: {fileID: 0}
     - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
       propertyPath: targetCameraHalfHeight
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
+        type: 2}
+      propertyPath: pixelPerfect
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 31c48b9da5e7c274db832ba047ee4c0f, type: 2}
