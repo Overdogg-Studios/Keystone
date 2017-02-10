@@ -27,25 +27,15 @@ public class PlayerController : MonoBehaviour {
 	private bool isRolling;
 
 
+	[HideInInspector]
 	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
 	public int maxVelocity; //The player's maximum speed (falling speed primarily).
 
 	//Points used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
-	public Transform leftGroundPoint;
-	public Transform centerGroundPoint;
-	public Transform rightGroundPoint;
-
-	public Transform leftCeilingPoint;
-	public Transform centerCeilingPoint;
-	public Transform rightCeilingPoint;
-
-	public Transform topRightSidePoint;
-	public Transform centerRightSidePoint;
-	public Transform bottomRightSidePoint;
-
-	public Transform topLeftSidePoint;
-	public Transform centerLeftSidePoint;
-	public Transform bottomLeftSidePoint;
+	private Transform leftSidePoint;
+	private Transform rightSidePoint;
+	private Transform ceilingPoint;
+	private Transform groundPoint;
 	
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
@@ -70,12 +60,17 @@ public class PlayerController : MonoBehaviour {
 	bool stoppedJumping = false;
 	bool stoppedDoubleJumping = true;
 
-	public CameraController mainCamera;
-
 	Rigidbody2D rb2D;  
 	Animator animator;
 	// Use this for initialization
 	void Start () {
+
+		isDead = false;
+
+		leftSidePoint = transform.Find("Contact Points/Left Side Point");
+		rightSidePoint = transform.Find("Contact Points/Right Side Point");
+		ceilingPoint = transform.Find("Contact Points/Ceiling Point");
+		groundPoint = transform.Find("Contact Points/Ground Point");
 
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
@@ -275,45 +270,20 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	/**
-	 * Return whether or not the player's ground points are in contact with anything on the layermask "Ground Mask".
+	 * Check to see if the player is touching the ground, ceiling or a wall on either side.
+	 * @return True if touching, false otherwise.
 	 */
 	public bool isGrounded() {
-
-		if(Physics2D.OverlapCircle(leftGroundPoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(rightGroundPoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(centerGroundPoint.position, ContactPoint.radius, groundMask)) {
-			//animator.SetInteger("State", 5);
-			return true;
-
-		}
-		else {
-			return false;
-		}
-		
+		return Physics2D.OverlapBox(groundPoint.position, new Vector2(groundPoint.GetComponent<ContactPoint>().x, groundPoint.GetComponent<ContactPoint>().y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingCeiling() {
-		return Physics2D.OverlapCircle(leftCeilingPoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(rightCeilingPoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(centerCeilingPoint.position, ContactPoint.radius, groundMask);
+		return Physics2D.OverlapBox(ceilingPoint.position, new Vector2(ceilingPoint.GetComponent<ContactPoint>().x, ceilingPoint.GetComponent<ContactPoint>().y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's right Wall Points are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingRightWall() {
-		return Physics2D.OverlapCircle(topRightSidePoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(centerRightSidePoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(bottomRightSidePoint.position, ContactPoint.radius, groundMask);
+		return Physics2D.OverlapBox(rightSidePoint.position, new Vector2(rightSidePoint.GetComponent<ContactPoint>().x, rightSidePoint.GetComponent<ContactPoint>().y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's left Wall Points are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapCircle(topLeftSidePoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(centerLeftSidePoint.position, ContactPoint.radius, groundMask) || 
-		Physics2D.OverlapCircle(bottomLeftSidePoint.position, ContactPoint.radius, groundMask);
+		return Physics2D.OverlapBox(leftSidePoint.position, new Vector2(leftSidePoint.GetComponent<ContactPoint>().x, leftSidePoint.GetComponent<ContactPoint>().y), 0f, groundMask);
 	}
 	/**
 	 * Controls whether or not the player is sprinting. If not sprinting, no additional speed is granted.
