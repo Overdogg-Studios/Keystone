@@ -6,30 +6,30 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-
 	public float speed; //Current player speed.
 	public float maxSpeed; //The fastest a player can move.
 	public float acceleration; //How fast the player will accelerate to max speed.
 	public float deceleration; //How fast the player decelerates down to 0 speed.
 	public float sprintMultiplier; //How much the player's movement speed is multiplied if the player is sprinting.
-	private float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
-	private float direction; //Which way the player is traveling. 1 for right, -1 for left.
+	public float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
+	public float direction; //Which way the player is traveling. 1 for right, -1 for left.
+    public int maxVelocity; //The player's maximum speed (falling speed primarily).
 
-	//M
-	private const float LEFT = -1;
-	private const float RIGHT = 1;
+	public const float LEFT = -1.0f;
+	public const float RIGHT = 1.0f;
 
 	public float rollTime; //How long the player's roll lasts.
 	public float rollDelay; //How long a player has to wait before they can roll again.
 	public float rollSpeedMultiplier; //Multiplier that determines how much the roll's speed is multiplied by.
-	private float currentRollTime;
-	private float currentRollDelay;
-	private bool isRolling;
+	public float currentRollTime;
+	public float currentRollDelay;
+	public bool isRolling;
+
+    private Sprint sprintState;
 
 
 	[HideInInspector]
 	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
-	public int maxVelocity; //The player's maximum speed (falling speed primarily).
 
 	//Points used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
 	private Transform leftSidePoint;
@@ -43,10 +43,9 @@ public class PlayerController : MonoBehaviour {
 	private ProjectileShooter weapon;
 	private HealthPool hp;
 	
-
 	public SavePoint lastSavePoint;
 
-
+	private State currentState;
 	/*these floats are the force you use to jump, the max time you want your jump to be allowed to happen,
      * and a counter to track how long you have been jumping*/
     public float jumpForce;
@@ -60,13 +59,14 @@ public class PlayerController : MonoBehaviour {
 	bool stoppedJumping = false;
 	bool stoppedDoubleJumping = true;
 
-	Rigidbody2D rb2D;  
-	Animator animator;
+	public Rigidbody2D rb2D;  
+	public Animator animator;
 	// Use this for initialization
 	void Start () {
 
 		isDead = false;
 
+        currentState = new Sprint();
 		leftSidePoint = transform.Find("Contact Points/Left Side Point");
 		rightSidePoint = transform.Find("Contact Points/Right Side Point");
 		ceilingPoint = transform.Find("Contact Points/Ceiling Point");
@@ -84,26 +84,24 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate() {
 		
-		if(!isDead && !isRolling) {
-			sprint();
-			move();
-		}
+		//if(!isDead && !isRolling) {
+		currentState.Update();
+		//}
 	}
 	void Update()
     {
 
     	if(!isDead) {
     		flipSprite();
-			roll();
 		}
     	if(!isDead && !isRolling) {
     		jump();
-    		shoot();
 			
     	}
-    	capMaxVelocity();
 		die();
 		respawn();
+ 
+       capMaxVelocity();
 		
     }
     public void flipSprite() {
@@ -117,6 +115,7 @@ public class PlayerController : MonoBehaviour {
     /**
      * Shoots a projectile from the projectile shooter.
      */
+    /*
     public void shoot() {
 
     	if(Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
@@ -135,6 +134,8 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
+    */
+    /*
     public void roll() {
 
     	if(Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
@@ -172,9 +173,11 @@ public class PlayerController : MonoBehaviour {
     		currentRollDelay -= Time.deltaTime;
     	}
     }
+    */
     /**
      * Move the character left and right.
      */
+    /*
     public void move() {
 
     	if(Input.GetKey("left") || Input.GetKey("right")) {
@@ -239,8 +242,6 @@ public class PlayerController : MonoBehaviour {
 	 */
 	void die() {
 		if(hp.currentHealth <= 0) {
-
-
 			isDead = true;
 			rb2D.isKinematic = true;
 			rb2D.velocity = new Vector2 (0, 0);

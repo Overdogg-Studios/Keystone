@@ -154,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010925968174}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.003, y: 0.087, z: 0}
+  m_LocalPosition: {x: -0.005, y: 0.087, z: 0}
   m_LocalScale: {x: 0.75, y: 0.8, z: 0}
   m_Children: []
   m_Father: {fileID: 4921091699789248}
@@ -167,7 +167,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011991120044}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.003, y: -0.169, z: 0}
+  m_LocalPosition: {x: -0.005, y: -0.169, z: 0}
   m_LocalScale: {x: 0.75, y: 0.8, z: 0}
   m_Children: []
   m_Father: {fileID: 4921091699789248}
@@ -368,8 +368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0.3
-  height: 0.015
+  x: 0.3
+  y: 0.015
 --- !u!114 &114000010444696104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -381,8 +381,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0.3
-  height: 0.015
+  x: 0.3
+  y: 0.015
 --- !u!114 &114000012979927740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -399,11 +399,16 @@ MonoBehaviour:
   acceleration: 12
   deceleration: 30
   sprintMultiplier: 2
+  currentSprintMultiplier: 0
+  direction: 0
+  maxVelocity: 12
   rollTime: 0.2
   rollDelay: 1
   rollSpeedMultiplier: 2
+  currentRollTime: 0
+  currentRollDelay: 0
+  isRolling: 0
   isDead: 0
-  maxVelocity: 12
   groundMask:
     serializedVersion: 2
     m_Bits: 256
@@ -414,6 +419,8 @@ MonoBehaviour:
   doubleJumpForce: 7
   doubleJumpTime: 0.15
   doubleJumpTimeCounter: 0
+  rb2D: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &114595539811706822
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -461,8 +468,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0.015
-  height: 0.4
+  x: 0.015
+  y: 0.4
 --- !u!114 &114953244198994270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -474,8 +481,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0.015
-  height: 0.4
+  x: 0.015
+  y: 0.4
 --- !u!212 &212000010907288678
 SpriteRenderer:
   m_ObjectHideFlags: 1
