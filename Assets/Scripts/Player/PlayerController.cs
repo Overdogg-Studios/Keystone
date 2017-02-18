@@ -31,11 +31,11 @@ public class PlayerController : MonoBehaviour {
 	[HideInInspector]
 	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
 
-	//Points used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
-	private Transform leftSidePoint;
-	private Transform rightSidePoint;
-	private Transform ceilingPoint;
-	private Transform groundPoint;
+	//Boxes used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
+	private Transform leftSideContactBox;
+	private Transform rightSideContactBox;
+	private Transform ceilingContactBox;
+	private Transform groundContactBox;
 	
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
@@ -67,10 +67,10 @@ public class PlayerController : MonoBehaviour {
 		isDead = false;
 
         currentState = new Sprint();
-		leftSidePoint = transform.Find("Contact Points/Left Side Point");
-		rightSidePoint = transform.Find("Contact Points/Right Side Point");
-		ceilingPoint = transform.Find("Contact Points/Ceiling Point");
-		groundPoint = transform.Find("Contact Points/Ground Point");
+		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box");
+		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box");
+		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box");
+		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box");
 
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
@@ -275,16 +275,16 @@ public class PlayerController : MonoBehaviour {
 	 * @return True if touching, false otherwise.
 	 */
 	public bool isGrounded() {
-		return Physics2D.OverlapBox(groundPoint.position, new Vector2(groundPoint.GetComponent<ContactPoint>().x, groundPoint.GetComponent<ContactPoint>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.GetComponent<ContactBox>().x, groundContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
 	}
 	public bool isTouchingCeiling() {
-		return Physics2D.OverlapBox(ceilingPoint.position, new Vector2(ceilingPoint.GetComponent<ContactPoint>().x, ceilingPoint.GetComponent<ContactPoint>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.GetComponent<ContactBox>().x, ceilingContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
 	}
 	public bool isTouchingRightWall() {
-		return Physics2D.OverlapBox(rightSidePoint.position, new Vector2(rightSidePoint.GetComponent<ContactPoint>().x, rightSidePoint.GetComponent<ContactPoint>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.GetComponent<ContactBox>().x, rightSideContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
 	}
 	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapBox(leftSidePoint.position, new Vector2(leftSidePoint.GetComponent<ContactPoint>().x, leftSidePoint.GetComponent<ContactPoint>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.GetComponent<ContactBox>().x, leftSideContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
 	}
 	/**
 	 * Controls whether or not the player is sprinting. If not sprinting, no additional speed is granted.

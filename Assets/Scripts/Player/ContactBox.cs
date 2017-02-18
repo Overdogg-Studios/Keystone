@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ContactPoint : MonoBehaviour {
+public class ContactBox : MonoBehaviour {
 
 	public float x;
 	public float y;
