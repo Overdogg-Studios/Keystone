@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Default : State {
+public class InAir : State {
 
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;

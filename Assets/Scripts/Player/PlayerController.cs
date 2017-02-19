@@ -6,12 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-	public float speed; //Current player speed.
+	public float baseMoveSpeed; //Current player speed.
 	public float maxSpeed; //The fastest a player can move.
 	public float acceleration; //How fast the player will accelerate to max speed.
 	public float deceleration; //How fast the player decelerates down to 0 speed.
 	public float sprintMultiplier; //How much the player's movement speed is multiplied if the player is sprinting.
-	public float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
 	public float direction; //Which way the player is traveling. 1 for right, -1 for left.
     public int maxVelocity; //The player's maximum speed (falling speed primarily).
 
@@ -25,27 +24,25 @@ public class PlayerController : MonoBehaviour {
 	public float currentRollDelay;
 	public bool isRolling;
 
-    private Sprint sprintState;
-
 
 	[HideInInspector]
 	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
 
 	//Boxes used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
-	private Transform leftSideContactBox;
-	private Transform rightSideContactBox;
-	private Transform ceilingContactBox;
-	private Transform groundContactBox;
+	Transform leftSideContactBox;
+	Transform rightSideContactBox;
+	Transform ceilingContactBox;
+	Transform groundContactBox;
 	
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
 
-	private ProjectileShooter weapon;
-	private HealthPool hp;
+	ProjectileShooter weapon;
+	HealthPool hp;
 	
 	public SavePoint lastSavePoint;
 
-	private State currentState;
+	State currentState;
 	/*these floats are the force you use to jump, the max time you want your jump to be allowed to happen,
      * and a counter to track how long you have been jumping*/
     public float jumpForce;
@@ -55,9 +52,9 @@ public class PlayerController : MonoBehaviour {
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
-    bool canDoubleJump;
-	bool stoppedJumping = false;
-	bool stoppedDoubleJumping = true;
+    public bool canDoubleJump;
+	public bool stoppedJumping = false;
+	public bool stoppedDoubleJumping = true;
 
 	public Rigidbody2D rb2D;  
 	public Animator animator;
@@ -74,23 +71,15 @@ public class PlayerController : MonoBehaviour {
 
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
-		currentSprintMultiplier = 1;
         jumpTimeCounter = jumpTime;
 		rb2D = GetComponent<Rigidbody2D>();
 		hp = GetComponent<HealthPool>();
 		hp.currentHealth = hp.maxHealth;
 		animator = GetComponent<Animator>();
 	}
-
-	void FixedUpdate() {
-		
-		//if(!isDead && !isRolling) {
-		currentState.Update();
-		//}
-	}
 	void Update()
     {
-
+    	currentState.Update();
     	if(!isDead) {
     		flipSprite();
 		}
@@ -100,7 +89,7 @@ public class PlayerController : MonoBehaviour {
     	}
 		die();
 		respawn();
- 
+ 		DetermineState();
        capMaxVelocity();
 		
     }
@@ -115,7 +104,6 @@ public class PlayerController : MonoBehaviour {
     /**
      * Shoots a projectile from the projectile shooter.
      */
-    /*
     public void shoot() {
 
     	if(Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
@@ -134,109 +122,24 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
-    */
-    /*
-    public void roll() {
-
-    	if(Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
-    		currentRollTime = rollTime;
-    		currentRollDelay = rollDelay;
-    		isRolling = true;
-    		animator.SetInteger("State", 3);
-
-	    	if(Input.GetKey("left")) {
-	    		direction = LEFT;
-	    	}
-	    	if(Input.GetKey("right")) {
-	    		direction = RIGHT;
-	    	}
+    void DetermineState() {
+    	if(isDead) {
+    		currentState = new Frozen();
     	}
-    	else if(isRolling && direction != 0) {
-
-    		speed = currentRollTime * direction * rollSpeedMultiplier;
-
-    		if(isTouchingLeftWall() && direction == LEFT) {
-    			speed = 0;
-    		}
-    		if(isTouchingRightWall() && direction == RIGHT) {
-    			speed = 0;
-    		}
-
-    		transform.position = new Vector3(transform.position.x + speed, transform.position.y, -1); 
-
-    		currentRollTime -= Time.deltaTime;
-    		if(currentRollTime <= 0) {
-    			isRolling = false;
-    		}
+    	else if(!isGrounded()) {
+    		currentState = new InAir();
     	}
-    	else {
-    		currentRollDelay -= Time.deltaTime;
-    	}
+		else if (Input.GetKey("left shift")) {
+			animator.SetInteger("State", 1);
+			currentState = new Sprint();
+		}
+		else {
+			if(animator.GetInteger("State") != 4) {
+				animator.SetInteger("State", 0);
+				currentState = new Default();
+			}
+		}
     }
-    */
-    /**
-     * Move the character left and right.
-     */
-    /*
-    public void move() {
-
-    	if(Input.GetKey("left") || Input.GetKey("right")) {
-    		if(animator.GetInteger("State") != 1) {
-    			animator.SetInteger("State", 4);
-    		}
-    	}
-    	else {
-    		animator.SetInteger("State", 0);
-    	}
-    	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
-    		
-    		
-    		direction = LEFT;
-    		if(speed > 0) {
-    			
-    			speed = speed/10;
-    		}
-    		speed = speed - acceleration * Time.deltaTime * currentSprintMultiplier;
-
-    		if(isTouchingLeftWall()) {
-    			speed = 0;
-    		}
-    	}
-    	else if ((Input.GetKey("right")) && (speed > (LEFT * maxSpeed * currentSprintMultiplier))) {
-    		direction = RIGHT;
-    		if(speed < 0) {
-    			speed = speed/10;
-    		}
-    		speed = speed + acceleration * Time.deltaTime * currentSprintMultiplier;
-
-    		if(isTouchingRightWall()) {
-    			speed = 0;
-    		}
-
-    	}
-    	else {
-    		
-    		if(speed > deceleration * Time.deltaTime) {
-    			speed = speed - deceleration * Time.deltaTime * currentSprintMultiplier;
-    		}
-    		else if(speed < -deceleration * Time.deltaTime) {
-    			speed = speed + deceleration * Time.deltaTime * currentSprintMultiplier;
-    		}
-    		else {
-    			speed = 0;
-    		}
-    	}
-    	if(speed > maxSpeed * currentSprintMultiplier) {
-    		speed = maxSpeed * currentSprintMultiplier;
-    	}
-    	if(speed < LEFT * maxSpeed * currentSprintMultiplier) {
-    		speed = LEFT * maxSpeed * currentSprintMultiplier;
-    	}
-    	transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, -1); 
-    }
-    /**
-     * Recieve damage. Although current design is that everything is one hit kill, the infastructure for a more gradual system is still in place.
-     */
 	/**
 	 * Handles the character's death upon currentPlayerHealth reaching 0. 
 	 */
@@ -285,22 +188,6 @@ public class PlayerController : MonoBehaviour {
 	}
 	public bool isTouchingLeftWall() {
 		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.GetComponent<ContactBox>().x, leftSideContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
-	}
-	/**
-	 * Controls whether or not the player is sprinting. If not sprinting, no additional speed is granted.
-	 */
-	public void sprint() {
-		if (Input.GetKey("left shift")) {
-			currentSprintMultiplier = sprintMultiplier;
-			animator.SetInteger("State", 1);
-		}
-		else {
-			currentSprintMultiplier = 1;
-			if(animator.GetInteger("State") != 4) {
-				animator.SetInteger("State", 0);
-			}
-			
-		}
 	}
 	/**
 	 * Cap the player's speed (typically falling speed) at a given maxVelocity.

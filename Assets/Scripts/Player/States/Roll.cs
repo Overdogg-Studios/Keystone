@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Roll : State {
+public class Roll{
 
+    /*
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;
 
@@ -50,4 +51,5 @@ public class Roll : State {
             player.currentRollDelay -= Time.deltaTime;
         }
     }
+    */
 }
