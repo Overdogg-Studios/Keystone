@@ -11,9 +11,9 @@ public class Sprint : State {
 	// Use this for initializatio
 	// Update is called once per frame
 	public override void Update () {
-		Sprint();
+		move();
 	}
-	public void Sprint() {
+	public void move() {
 
     	if(Input.GetKey("left") || Input.GetKey("right")) {
     		if(player.animator.GetInteger("State") != 1) {
