@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4000010608352192}
   - component: {fileID: 114000010314926992}
   m_Layer: 10
-  m_Name: Ceiling Point
+  m_Name: Ceiling Contact Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,6 @@ GameObject:
   - component: {fileID: 4000012272451012}
   - component: {fileID: 212000010907288678}
   - component: {fileID: 61000012183622496}
-  - component: {fileID: 58000013327704516}
   - component: {fileID: 50000010037456072}
   - component: {fileID: 114000012979927740}
   - component: {fileID: 95388082243314240}
@@ -60,7 +59,7 @@ GameObject:
   - component: {fileID: 4000011793779236}
   - component: {fileID: 114000010444696104}
   m_Layer: 10
-  m_Name: Ground Point
+  m_Name: Ground Contact Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +92,7 @@ GameObject:
   - component: {fileID: 4578807097556918}
   - component: {fileID: 114953244198994270}
   m_Layer: 10
-  m_Name: Left Side Point
+  m_Name: Left Side Contact Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +125,7 @@ GameObject:
   - component: {fileID: 4458885063006880}
   - component: {fileID: 114899270364190606}
   m_Layer: 10
-  m_Name: Right Side Point
+  m_Name: Right Side Contact Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4921091699789248}
   m_Layer: 10
-  m_Name: Contact Points
+  m_Name: Contact Boxes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -278,20 +277,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!58 &58000013327704516
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011388526952}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: ddc760a373c108544bb624686c4e75a7, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: -0.001, y: -0.11}
-  serializedVersion: 2
-  m_Radius: 0.20992216
 --- !u!61 &61000012183622496
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -365,11 +350,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010925968174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c7c5d7402def9ec42954624952a5669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0.3
   y: 0.015
+  position: {x: 0, y: 0}
 --- !u!114 &114000010444696104
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -378,11 +364,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000011991120044}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c7c5d7402def9ec42954624952a5669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0.3
   y: 0.015
+  position: {x: 0, y: 0}
 --- !u!114 &114000012979927740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -394,20 +381,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29a5cdb242df3a14bab38d21b6fd3fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  horizontalSpeed: 0
   maxSpeed: 5
-  acceleration: 12
-  deceleration: 30
-  sprintMultiplier: 2
+  horizontalAcceleration: 30
+  horizontalDeceleration: 30
+  sprintMultiplier: 1.6
   currentSprintMultiplier: 0
   direction: 0
   maxVelocity: 12
-  rollTime: 0.2
-  rollDelay: 1
-  rollSpeedMultiplier: 2
-  currentRollTime: 0
-  currentRollDelay: 0
-  isRolling: 0
   isDead: 0
   groundMask:
     serializedVersion: 2
@@ -419,6 +400,9 @@ MonoBehaviour:
   doubleJumpForce: 7
   doubleJumpTime: 0.15
   doubleJumpTimeCounter: 0
+  canDoubleJump: 0
+  stoppedJumping: 0
+  stoppedDoubleJumping: 1
   rb2D: {fileID: 0}
   animator: {fileID: 0}
 --- !u!114 &114595539811706822
@@ -465,11 +449,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1811583545795206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c7c5d7402def9ec42954624952a5669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0.015
   y: 0.4
+  position: {x: 0, y: 0}
 --- !u!114 &114953244198994270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -478,11 +463,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1126408944241392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49db07c235b027645847682989a152b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c7c5d7402def9ec42954624952a5669a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   x: 0.015
   y: 0.4
+  position: {x: 0, y: 0}
 --- !u!212 &212000010907288678
 SpriteRenderer:
   m_ObjectHideFlags: 1

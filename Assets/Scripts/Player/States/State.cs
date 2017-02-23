@@ -5,4 +5,5 @@ using UnityEngine;
 public abstract class State {
 
 	public abstract void Update();
+	public abstract override string ToString();
 }

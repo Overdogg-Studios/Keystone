@@ -6,33 +6,25 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-	public float baseMoveSpeed; //Current player speed.
-	public float maxSpeed; //The fastest a player can move.
-	public float acceleration; //How fast the player will accelerate to max speed.
-	public float deceleration; //How fast the player decelerates down to 0 speed.
-	public float sprintMultiplier; //How much the player's movement speed is multiplied if the player is sprinting.
-	public float direction; //Which way the player is traveling. 1 for right, -1 for left.
-    public int maxVelocity; //The player's maximum speed (falling speed primarily).
+	public float horizontalSpeed; 
+	public float maxSpeed; 
+	public float horizontalAcceleration; 
+	public float horizontalDeceleration;
+	public float sprintMultiplier;
+	public float currentSprintMultiplier;
+	public float direction;
+    public int terminalVelocity;
 
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;
 
-	public float rollTime; //How long the player's roll lasts.
-	public float rollDelay; //How long a player has to wait before they can roll again.
-	public float rollSpeedMultiplier; //Multiplier that determines how much the roll's speed is multiplied by.
-	public float currentRollTime;
-	public float currentRollDelay;
-	public bool isRolling;
-
-
 	[HideInInspector]
-	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
+	public bool isDead;
 
-	//Boxes used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
-	Transform leftSideContactBox;
-	Transform rightSideContactBox;
-	Transform ceilingContactBox;
-	Transform groundContactBox;
+	ContactBox leftSideContactBox;
+	ContactBox rightSideContactBox;
+	ContactBox ceilingContactBox;
+	ContactBox groundContactBox;
 	
 	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
@@ -56,18 +48,20 @@ public class PlayerController : MonoBehaviour {
 	public bool stoppedJumping = false;
 	public bool stoppedDoubleJumping = true;
 
-	public Rigidbody2D rb2D;  
+	public Rigidbody2D rb2D; 
+
 	public Animator animator;
 	// Use this for initialization
 	void Start () {
 
+		animator = GetComponent<Animator>();
 		isDead = false;
-
-        currentState = new Sprint();
-		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box");
-		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box");
-		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box");
-		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box");
+		currentSprintMultiplier = 1;
+        currentState = new Idle();
+		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box").GetComponent<ContactBox>();
+		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box").GetComponent<ContactBox>();
+		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box").GetComponent<ContactBox>();
+		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
 
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
@@ -75,22 +69,17 @@ public class PlayerController : MonoBehaviour {
 		rb2D = GetComponent<Rigidbody2D>();
 		hp = GetComponent<HealthPool>();
 		hp.currentHealth = hp.maxHealth;
-		animator = GetComponent<Animator>();
+		
 	}
 	void Update()
     {
     	currentState.Update();
-    	if(!isDead) {
-    		flipSprite();
-		}
-    	if(!isDead && !isRolling) {
-    		jump();
-			
-    	}
+    	flipSprite();
 		die();
 		respawn();
  		DetermineState();
-       capMaxVelocity();
+		capMaxVelocity();
+		shoot();
 		
     }
     public void flipSprite() {
@@ -129,16 +118,18 @@ public class PlayerController : MonoBehaviour {
     	else if(!isGrounded()) {
     		currentState = new InAir();
     	}
-		else if (Input.GetKey("left shift")) {
-			animator.SetInteger("State", 1);
-			currentState = new Sprint();
-		}
-		else {
-			if(animator.GetInteger("State") != 4) {
-				animator.SetInteger("State", 0);
-				currentState = new Default();
+		else if (Input.GetKey("left") || Input.GetKey("right")) {
+			if(Input.GetKey("left shift")) {
+				currentState = new Sprint();
+			}
+			else {
+				currentState = new Run();
 			}
 		}
+		else {
+			currentState = new Idle();
+		}
+		Debug.Log(currentState);
     }
 	/**
 	 * Handles the character's death upon currentPlayerHealth reaching 0. 
@@ -169,32 +160,30 @@ public class PlayerController : MonoBehaviour {
 			else {
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);﻿
 			}
-			
 		}
-		
 	}
 	/**
 	 * Check to see if the player is touching the ground, ceiling or a wall on either side.
-	 * @return True if touching, false otherwise.
+	 * @return true if touching, false otherwise.
 	 */
 	public bool isGrounded() {
-		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.GetComponent<ContactBox>().x, groundContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.x, groundContactBox.y), 0f, groundMask);
 	}
 	public bool isTouchingCeiling() {
-		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.GetComponent<ContactBox>().x, ceilingContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.x, ceilingContactBox.y), 0f, groundMask);
 	}
 	public bool isTouchingRightWall() {
-		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.GetComponent<ContactBox>().x, rightSideContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.x, rightSideContactBox.y), 0f, groundMask);
 	}
 	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.GetComponent<ContactBox>().x, leftSideContactBox.GetComponent<ContactBox>().y), 0f, groundMask);
+		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.x, leftSideContactBox.y), 0f, groundMask);
 	}
 	/**
-	 * Cap the player's speed (typically falling speed) at a given maxVelocity.
+	 * Cap the player's speed (typically falling speed) at a given terminalVelocity.
 	 */
 	public void capMaxVelocity() {
-		if(rb2D.velocity.magnitude > maxVelocity) {
-			rb2D.velocity = rb2D.velocity.normalized*maxVelocity;
+		if(rb2D.velocity.magnitude > terminalVelocity) {
+			rb2D.velocity = rb2D.velocity.normalized*terminalVelocity;
 		}
 	}
 	/**
@@ -272,4 +261,50 @@ public class PlayerController : MonoBehaviour {
 	public void setSavePoint(SavePoint current) {
 		lastSavePoint = current;
 	}
+	public void move() {
+    	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
+    		
+    		direction = LEFT;
+    		if(horizontalSpeed > 0) {
+    			
+    			horizontalSpeed = horizontalSpeed/10;
+    		}
+    		horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
+
+    		if(isTouchingLeftWall()) {
+    			horizontalSpeed = 0;
+    		}
+    	}
+    	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
+    		direction = RIGHT;
+    		if(horizontalSpeed < 0) {
+    			horizontalSpeed = horizontalSpeed/10;
+    		}
+    		horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
+
+    		if(isTouchingRightWall()) {
+    			horizontalSpeed = 0;
+    		}
+
+    	}
+    	else {
+    		
+    		if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
+    			horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
+    		}
+    		else if(horizontalSpeed < -horizontalDeceleration * Time.deltaTime) {
+    			horizontalSpeed = horizontalSpeed + horizontalDeceleration * Time.deltaTime;
+    		}
+    		else {
+    			horizontalSpeed = 0;
+    		}
+    	}
+    	if(horizontalSpeed > maxSpeed) {
+    		horizontalSpeed = maxSpeed;
+    	}
+    	if(horizontalSpeed < LEFT * maxSpeed ) {
+    		horizontalSpeed = LEFT * maxSpeed;
+    	}
+    	transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
+    }
 }
