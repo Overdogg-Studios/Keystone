@@ -18,12 +18,10 @@ public class SplashScreen : MonoBehaviour {
 	void Update () {
         timer -= Time.deltaTime;
 
-        if(timer > 0)
-        {
+        if(timer > 0) {
             return;
         }
-        else
-        {
+        else {
             SceneManager.LoadScene(nextSceneName);
         }
 	}

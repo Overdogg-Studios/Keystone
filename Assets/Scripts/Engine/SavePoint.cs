@@ -26,6 +26,11 @@ public class SavePoint : MonoBehaviour {
 			player.setSavePoint(GetComponent<SavePoint>());
 		}
 	}
+
+    /**
+     * Returns the position vector of the save point
+     * @return Returns the position vector of the save point
+     */
 	public Vector3 getPosition() {
 		return new Vector3(xPosition, yPosition, -1);
 	}

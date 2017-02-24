@@ -5,23 +5,19 @@ using System.Text;
 using UnityEngine;
 
 
-class LaserSensor : MonoBehaviour
-{
+class LaserSensor : MonoBehaviour {
     private Sensor sensor;
     private Laser[] l;
 
-    void Start()
-    {
+    void Start() {
         l = GetComponentsInChildren<Laser>();
     }
     void Update() {
         sensor = GetComponent<Sensor>();
 
-        if(sensor.playerDetected)
-        {
+        if(sensor.playerDetected) {
             
-            for(int i = 0; i < l.Length; i++)
-            { 
+            for(int i = 0; i < l.Length; i++) { 
                 l[i].isActivated = true;
             }
         }

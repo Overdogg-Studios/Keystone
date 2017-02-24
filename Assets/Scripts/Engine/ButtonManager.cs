@@ -18,13 +18,18 @@ public class ButtonManager : MonoBehaviour
 
     }
 
-    public void LoadLevel(string level)
-    {
+    /**
+     * Loads a scene
+     * @param level The name of the scene to load
+     */
+    public void LoadLevel(string level) {
         SceneManager.LoadScene(level);
     }
 
-    public void ExitGame()
-    {
+    /**
+     * Closes the game
+     */
+    public void ExitGame() {
         Application.Quit();
     }
 }

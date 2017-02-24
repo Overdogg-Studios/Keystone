@@ -10,14 +10,12 @@ public class CopyColorsToShader : MonoBehaviour
     public Color bootColor;
     public Color hatColor;
 
-    void Start()
-    {
+    void Start() {
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         GetComponent<Renderer>().material.SetColor("_Color", skinColor);
         GetComponent<Renderer>().material.SetColor("_Boots", bootColor);
         GetComponent<Renderer>().material.SetColor("_Hat", hatColor);

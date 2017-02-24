@@ -11,12 +11,10 @@ public class Fade : MonoBehaviour {
     private float timer;
     private Image image;
 	// Use this for initialization
-	void Start ()
-    {
+	void Start () {
 		image = GetComponent<Image>();
         timer = fadeTime;
-        if(fadeIn)
-        {
+        if(fadeIn) {
             Color currentColor = image.color;
             currentColor.a = 0;
             image.color = currentColor;
@@ -24,35 +22,28 @@ public class Fade : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         float delta = Time.deltaTime;
 
         timer -= delta;
-        if(timer > 0)
-        {
+        if(timer > 0) {
             Color currentColor = image.color;
             float newAlpha = currentColor.a;
-            if (fadeIn)
-            {
+            if (fadeIn) {
                 newAlpha += delta / 2;
             }
-            else
-            {
+            else {
                 newAlpha -= delta / 2;
             }
             currentColor.a = newAlpha;
             image.color = currentColor;
         }
-        else
-        {
-            if(fadeInOut && fadeIn)
-            {
+        else {
+            if(fadeInOut && fadeIn) {
                 fadeIn = false;
                 timer = fadeTime;
             }
-            else if(fadeOutIn && fadeIn == false)
-            {
+            else if(fadeOutIn && fadeIn == false) {
                 fadeIn = true;
                 timer = fadeTime;
             }

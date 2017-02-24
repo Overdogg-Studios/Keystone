@@ -3,9 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
-{
-
+public class PlayerController : MonoBehaviour {
 
     public float speed; //Current player speed.
     public float maxSpeed; //The fastest a player can move.
@@ -78,9 +76,9 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody2D rb2D;
     Animator animator;
+
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
 
         direction = 1;
         weapon = GetComponent<ProjectileShooter>();
@@ -93,200 +91,162 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void FixedUpdate()
-    {
-
-
-
-        if (!isDead && !isRolling)
-        {
+    void FixedUpdate() {
+        if (!isDead && !isRolling) {
             sprint();
             move();
         }
     }
-    void Update()
-    {
+    void Update() {
 
-        if (!isDead)
-        {
+        if (!isDead) {
             flipSprite();
             roll();
         }
-        if (!isDead && !isRolling)
-        {
+        if (!isDead && !isRolling) {
             jump();
             shoot();
-
         }
         capMaxVelocity();
         die();
         respawn();
 
     }
-    public void flipSprite()
-    {
-        if (direction == 1)
-        {
+
+    /**
+     * Flips the sprite over the x axis if the direction is -1
+     */
+    public void flipSprite() {
+        if (direction == 1) {
             this.GetComponent<SpriteRenderer>().flipX = false;
         }
-        if (direction == -1)
-        {
+        if (direction == -1) {
             this.GetComponent<SpriteRenderer>().flipX = true;
         }
     }
     /**
      * Shoots a projectile from the projectile shooter.
      */
-    public void shoot()
-    {
+    public void shoot() {
 
-        if (Input.GetKey("a") && weapon.currentTimeInterval <= 0)
-        {
+        if (Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
 
             weapon.xDirection = direction;
 
-            if ((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0))
-            {
+            if ((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
 
                 weapon.xOffset *= -1;
             }
             weapon.createProjectile();
             weapon.currentTimeInterval = weapon.timeInterval;
         }
-        else
-        {
+        else {
             weapon.currentTimeInterval -= Time.deltaTime;
         }
 
     }
-    public void roll()
-    {
 
-        if (Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0)
-        {
+    /**
+     * Causes the player to roll
+     */
+    public void roll() {
+
+        if (Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
             currentRollTime = rollTime;
             currentRollDelay = rollDelay;
             isRolling = true;
             animator.SetInteger("State", 3);
 
-            if (Input.GetKey("left"))
-            {
+            if (Input.GetKey("left")) {
                 direction = -1;
             }
-            if (Input.GetKey("right"))
-            {
+            if (Input.GetKey("right")) {
                 direction = 1;
             }
         }
-        else if (isRolling && direction != 0)
-        {
+        else if (isRolling && direction != 0) {
 
             speed = currentRollTime * direction * rollSpeedMultiplier;
 
-            if (isTouchingLeftWall() && direction == -1)
-            {
+            if (isTouchingLeftWall() && direction == -1) {
                 speed = 0;
             }
-            if (isTouchingRightWall() && direction == 1)
-            {
+            if (isTouchingRightWall() && direction == 1) {
                 speed = 0;
             }
 
             transform.position = new Vector3(transform.position.x + speed, transform.position.y, -1);
 
             currentRollTime -= Time.deltaTime;
-            if (currentRollTime <= 0)
-            {
+            if (currentRollTime <= 0) {
                 isRolling = false;
             }
         }
-        else
-        {
+        else {
             currentRollDelay -= Time.deltaTime;
         }
     }
     /**
      * Move the character left and right.
      */
-    public void move()
-    {
-        if (Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier)))
-        {
-            if (animator.GetInteger("State") != 1)
-            {
+    public void move() {
+        if (Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
+            if (animator.GetInteger("State") != 1) {
                 animator.SetInteger("State", 4);
             }
 
             direction = -1;
-            if (speed > 0)
-            {
+            if (speed > 0) {
 
                 speed = speed / 10;
             }
             speed = speed - acceleration * Time.deltaTime * currentSprintMultiplier;
 
-            if (isTouchingLeftWall())
-            {
+            if (isTouchingLeftWall()) {
                 speed = 0;
             }
         }
-        else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier)))
-        {
-            if (animator.GetInteger("State") != 1)
-            {
+        else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier))) {
+            if (animator.GetInteger("State") != 1) {
                 animator.SetInteger("State", 4);
             }
             direction = 1;
-            if (speed < 0)
-            {
+            if (speed < 0) {
                 speed = speed / 10;
             }
             speed = speed + acceleration * Time.deltaTime * currentSprintMultiplier;
 
-            if (isTouchingRightWall())
-            {
+            if (isTouchingRightWall()) {
                 speed = 0;
             }
 
         }
-        else
-        {
+        else {
             animator.SetInteger("State", 0);
-            if (speed > deceleration * Time.deltaTime)
-            {
+            if (speed > deceleration * Time.deltaTime) {
                 speed = speed - deceleration * Time.deltaTime * currentSprintMultiplier;
             }
-            else if (speed < -deceleration * Time.deltaTime)
-            {
+            else if (speed < -deceleration * Time.deltaTime) {
                 speed = speed + deceleration * Time.deltaTime * currentSprintMultiplier;
             }
-            else
-            {
+            else {
                 speed = 0;
             }
         }
-        if (speed > maxSpeed * currentSprintMultiplier)
-        {
+        if (speed > maxSpeed * currentSprintMultiplier) {
             speed = maxSpeed * currentSprintMultiplier;
         }
-        if (speed < -1 * maxSpeed * currentSprintMultiplier)
-        {
+        if (speed < -1 * maxSpeed * currentSprintMultiplier) {
             speed = -1 * maxSpeed * currentSprintMultiplier;
         }
         transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, -1);
     }
     /**
      * Recieve damage. Although current design is that everything is one hit kill, the infastructure for a more gradual system is still in place.
-     */
-    /**
 	 * Handles the character's death upon currentPlayerHealth reaching 0. 
 	 */
-    void die()
-    {
-        if (hp.currentHealth <= 0)
-        {
-
-
+    void die() {
+        if (hp.currentHealth <= 0) {
             isDead = true;
             rb2D.isKinematic = true;
             rb2D.velocity = new Vector2(0, 0);
@@ -299,19 +259,18 @@ public class PlayerController : MonoBehaviour
             centerScreen.z = -3;
             deathScreen.transform.position = centerScreen;
             deathScreen.GetComponent<Renderer>().enabled = true;
-
-
         }
     }
-    void respawn()
-    {
 
-        if (Input.GetKeyDown(KeyCode.R))
-        {
+    /**
+     * Respawns the player
+     */
+    void respawn() {
+
+        if (Input.GetKeyDown(KeyCode.R)) {
 
             //If the player has not reached a save point. 
-            if (lastSavePoint != null)
-            {
+            if (lastSavePoint != null) {
 
                 isDead = false;
                 rb2D.isKinematic = false;
@@ -325,20 +284,17 @@ public class PlayerController : MonoBehaviour
                 hp.currentHealth = hp.maxHealth;
             }
             //Otherwise just reload the level.
-            else
-            {
+            else {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
 
         }
-
-
     }
     /**
 	 * Return whether or not the player's ground points are in contact with anything on the layermask "Ground Mask".
+     * @return Return whether or not the player's ground points are in contact with anything on the layermask "Ground Mask".
 	 */
-    public bool isGrounded()
-    {
+    public bool isGrounded() {
 
         return Physics2D.OverlapCircle(leftGroundPoint.position, radiusOfContactPoints, groundMask) ||
         Physics2D.OverlapCircle(rightGroundPoint.position, radiusOfContactPoints, groundMask) ||
@@ -346,24 +302,25 @@ public class PlayerController : MonoBehaviour
     }
     /**
 	 * Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
+     * @return Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
 	 */
-    public bool isTouchingCeiling()
-    {
+    public bool isTouchingCeiling() {
         return Physics2D.OverlapCircle(leftCeilingPoint.position, radiusOfContactPoints, groundMask) ||
         Physics2D.OverlapCircle(rightCeilingPoint.position, radiusOfContactPoints, groundMask) ||
         Physics2D.OverlapCircle(centerCeilingPoint.position, radiusOfContactPoints, groundMask);
     }
     /**
 	 * Return whether or not the player's right Wall Points are in contact with anything on the layermask "Ground Mask".
+     * @return Return whether or not the player's right Wall Points are in contact with anything on the layermask "Ground Mask".
 	 */
-    public bool isTouchingRightWall()
-    {
+    public bool isTouchingRightWall() {
         return Physics2D.OverlapCircle(topRightSidePoint.position, radiusOfContactPoints, groundMask) ||
         Physics2D.OverlapCircle(centerRightSidePoint.position, radiusOfContactPoints, groundMask) ||
         Physics2D.OverlapCircle(bottomRightSidePoint.position, radiusOfContactPoints, groundMask);
     }
     /**
 	 * Return whether or not the player's left Wall Points are in contact with anything on the layermask "Ground Mask".
+     * @return Return whether or not the player's left Wall Points are in contact with anything on the layermask "Ground Mask".
 	 */
     public bool isTouchingLeftWall()
     {
@@ -376,13 +333,11 @@ public class PlayerController : MonoBehaviour
 	 */
     public void sprint()
     {
-        if (Input.GetKey("left shift"))
-        {
+        if (Input.GetKey("left shift")) {
             currentSprintMultiplier = sprintMultiplier;
             animator.SetInteger("State", 1);
         }
-        else
-        {
+        else {
             currentSprintMultiplier = 1;
             //animator.SetInteger("State", 0);
         }
@@ -390,29 +345,23 @@ public class PlayerController : MonoBehaviour
     /**
 	 * Cap the player's speed (typically falling speed) at a given maxVelocity.
 	 */
-    public void capMaxVelocity()
-    {
-        if (rb2D.velocity.magnitude > maxVelocity)
-        {
+    public void capMaxVelocity() {
+        if (rb2D.velocity.magnitude > maxVelocity) {
             rb2D.velocity = rb2D.velocity.normalized * maxVelocity;
         }
     }
     /**
 	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
 	 */
-    public void jump()
-    {
+    public void jump() {
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
+        if (Input.GetKeyDown(KeyCode.E)) {
 
-            if (isGrounded())
-            {
+            if (isGrounded()) {
                 rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
                 stoppedJumping = false;
             }
-            else if (canDoubleJump)
-            {
+            else if (canDoubleJump) {
 
                 rb2D.velocity = new Vector2(rb2D.velocity.x, 0);
                 rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
@@ -420,67 +369,59 @@ public class PlayerController : MonoBehaviour
                 canDoubleJump = false;
 
             }
-            else
-            {
+            else {
 
             }
         }
         //if you keep holding down the jump button...
-        if ((Input.GetKey(KeyCode.E)) && !stoppedJumping)
-        {
+        if ((Input.GetKey(KeyCode.E)) && !stoppedJumping) {
             //animator.SetInteger("State", 2);
             //and your counter hasn't reached zero...
-            if (jumpTimeCounter > 0)
-            {
+            if (jumpTimeCounter > 0) {
                 //keep jumping!
                 rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
             }
         }
-        if ((Input.GetKey(KeyCode.E)) && !stoppedDoubleJumping)
-        {
+        if ((Input.GetKey(KeyCode.E)) && !stoppedDoubleJumping) {
             //and your counter hasn't reached zero...
-            if (doubleJumpTimeCounter > 0)
-            {
+            if (doubleJumpTimeCounter > 0) {
                 rb2D.velocity = new Vector2(rb2D.velocity.x, doubleJumpForce);
             }
         }
-        if (!isGrounded())
-        {
+        if (!isGrounded()) {
             jumpTimeCounter -= Time.deltaTime;
         }
-        if (stoppedJumping && !canDoubleJump)
-        {
+        if (stoppedJumping && !canDoubleJump) {
             doubleJumpTimeCounter -= Time.deltaTime;
         }
         //if you stop holding down the jump button...
-        if (jumpTimeCounter <= 0)
-        {
+        if (jumpTimeCounter <= 0) {
             //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
             jumpTimeCounter = 0;
             stoppedJumping = true;
         }
-        if (doubleJumpTimeCounter <= 0)
-        {
+        if (doubleJumpTimeCounter <= 0) {
             //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
             doubleJumpTimeCounter = 0;
             stoppedDoubleJumping = true;
         }
-        if (isGrounded())
-        {
+        if (isGrounded()) {
             jumpTimeCounter = jumpTime;
             doubleJumpTimeCounter = doubleJumpTime;
             canDoubleJump = true;
             //animator.SetInteger("State", 5);
         }
-        if (isTouchingCeiling())
-        {
+        if (isTouchingCeiling()) {
             rb2D.velocity = new Vector2(rb2D.velocity.x, 0);
             doubleJumpTimeCounter = 0;
             jumpTimeCounter = 0;
         }
     }
-    public void setSavePoint(SavePoint current)
-    {
+    /**
+     * Sets the save point
+     * @param The save point
+     */
+    public void setSavePoint(SavePoint current) {
         lastSavePoint = current;
     }
 }

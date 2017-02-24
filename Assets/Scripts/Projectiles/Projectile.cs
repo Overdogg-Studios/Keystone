@@ -38,7 +38,12 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 	/**
-	 * 
+	 * Sets the projectile in motion
+     * @param travelTime The travel time of the projectile
+     * @param xDirection The direction in the x direction the projectile moves
+     * @param yDirection The direction in the y direction the projectile moves
+     * @param xVelocity The velocity in the x direction
+     * @param yVelocity The velocity in the y direction
 	 */
 	public void make(float travelTime, float xDirection, float yDirection, float xVelocity, float yVelocity) {
 		this.travelTime = travelTime;

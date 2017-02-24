@@ -42,6 +42,10 @@ public class ProjectileShooter : MonoBehaviour {
 			projectileLocation = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, transform.position.z);
 		}
 	}
+
+    /**
+     * Creates a new projectile
+     */
 	public void createProjectile() {
 
 		GameObject go = (GameObject)Instantiate(Resources.Load(projectileName), projectileLocation, Quaternion.Euler(0, 180, 0));

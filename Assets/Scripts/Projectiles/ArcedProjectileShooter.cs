@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-class ArcedProjectileShooter : MonoBehaviour
-{
+class ArcedProjectileShooter : MonoBehaviour {
     public bool isEnemy;
     public string arrowName;
     public float airTime;
@@ -14,8 +13,7 @@ class ArcedProjectileShooter : MonoBehaviour
     private Sensor sensor;
     private float timer;
 
-    void Start()
-    {
+    void Start() {
         timer = 0.0f;
         allen = GameObject.Find("Player").GetComponent<PlayerController>();
         sensor = GetComponent<Sensor>();
@@ -23,8 +21,7 @@ class ArcedProjectileShooter : MonoBehaviour
     }
     void Update() {
         if(sensor.playerDetected) {
-            if (timer >= timeBetweenShots)
-            {
+            if (timer >= timeBetweenShots) {
                 Debug.Log("Found Enemy!");
                 GameObject go = (GameObject)Instantiate(Resources.Load(arrowName), transform.position, Quaternion.Euler(0, 180, 0));
                 ArcedProjectile proj = go.GetComponent<ArcedProjectile>();

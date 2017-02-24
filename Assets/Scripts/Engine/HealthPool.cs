@@ -16,6 +16,10 @@ public class HealthPool : MonoBehaviour {
 		
 	}
 
+    /**
+     * Makes the current entity take damage
+     * @param dmg The amount of damage to take
+     */
 	public void takeDamage(int dmg) {
 		currentHealth -= dmg;
 	}

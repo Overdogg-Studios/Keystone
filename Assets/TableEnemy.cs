@@ -9,30 +9,24 @@ public class TableEnemy : MonoBehaviour
     private Animator anim;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         anim = this.GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (state == 0)
-        {
+    void Update() {
+        if (state == 0) {
             anim.enabled = false;
         }
-        else
-        {
+        else {
             anim.enabled = true;
             float translateSpeed = Random.Range(-2, 2);
             this.transform.Translate(translateSpeed, 0,0);
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
+    void OnTriggerEnter2D(Collider2D other) { 
+        if (other.gameObject.tag == "Player") {
             state = 1;
         }
     }

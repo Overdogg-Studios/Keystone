@@ -5,19 +5,16 @@ using UnityEngine;
 public class CreditsScroll : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () 
-	{
+	void Start () { 
 		
 	}
 	
 	// Update is called once per frame
-	void Update () 
-	{
+	void Update () {
 
 	}
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         this.transform.Translate(0, 1, 0);
     }
 }

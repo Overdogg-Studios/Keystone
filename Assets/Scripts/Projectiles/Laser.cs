@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Laser : MonoBehaviour
-{
+public class Laser : MonoBehaviour {
 
     private PlayerController allen;
     public bool isActivated;
@@ -14,21 +13,18 @@ public class Laser : MonoBehaviour
     public Sprite LaserOff;
     public Sprite LaserOn;
 
-    void Start()
-    {
+    void Start() {
         isPoweredOn = false;
         timer = 0.0f;
         onTimer = 0;
     }
-    void FixedUpdate()
-    {
+
+    void FixedUpdate() {
         timer += Time.deltaTime;
 
-        if(onTimer != 0 || isPoweredOn)
-        {
+        if(onTimer != 0 || isPoweredOn) {
             onTimer += Time.deltaTime;
-            if(onTimer > onTimeLength)
-            {
+            if(onTimer > onTimeLength) {
                 onTimer = 0.0f;
                 isPoweredOn = false;
                 isActivated = false;
@@ -36,25 +32,20 @@ public class Laser : MonoBehaviour
                 timer = 0.0f;
             }
         }
-        else
-        {
-            if (timer > timeInterval && isActivated)
-            {
+        else {
+            if (timer > timeInterval && isActivated) {
                 isPoweredOn = true;
                 GetComponent<Hazard>().isActive = true;
                 timer = 0.0f;
-            }
-            else
-            {
+            } 
+            else {
                 isPoweredOn = false;
                 GetComponent<Hazard>().isActive = false;
             }
-            if (!isPoweredOn)
-            {
+            if (!isPoweredOn) {
                 GetComponent<SpriteRenderer>().sprite = LaserOff;
             }
-            else
-            {
+            else {
                 GetComponent<SpriteRenderer>().sprite = LaserOn;
             }
         }
