@@ -10,9 +10,6 @@ public class Idle : State {
 	public override void Update () {
 
         player.animator.SetInteger("State", 0);
-        player.currentSprintMultiplier = 1;
-		player.move();
-        player.jump();
         
 	}
     public override string ToString() {
