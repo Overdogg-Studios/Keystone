@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour {
 	public HealthPool healthPool;
 	
 	public SavePoint lastSavePoint;
-
+    public Vector3 spawnPoint;
     public State currentState;
 	
     public float jumpForce;
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 
+        spawnPoint = transform.position;
         currentState = new Default();
 		animator = GetComponent<Animator>();
 		currentSprintMultiplier = 1;
@@ -126,16 +127,16 @@ public class PlayerController : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.R)) {
 
 			if(lastSavePoint != null) {
-
-				rb2D.isKinematic = false;
 				Vector3 saveLocation = lastSavePoint.getPosition();
 				transform.position = saveLocation;
-				this.GetComponent<Renderer>().enabled = true; 
-				healthPool.currentHealth = healthPool.maxHealth;
 			}
 			else {
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name);﻿
+                transform.position = spawnPoint;
 			}
+            
+            rb2D.isKinematic = false;
+            this.GetComponent<Renderer>().enabled = true; 
+            healthPool.currentHealth = healthPool.maxHealth;
 		}
 	}
 	/**
