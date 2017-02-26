@@ -6,7 +6,7 @@ using UnityEngine;
 
 class ArcedProjectileShooter : MonoBehaviour
 {
-    public bool isEnemy;
+    //public bool isEnemy;
     public string arrowName;
     public float airTime;
     public float timeBetweenShots;

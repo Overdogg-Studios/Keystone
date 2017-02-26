@@ -1,65 +1,42 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/**
+ * Contains player abilities and attributes. Uses external states to activate and control available functions and animation states.
+ * @type MonoBehaviour
+ */
 public class PlayerController : MonoBehaviour {
 
+	[ShowOnly] public float horizontalSpeed; 
+	public float maxSpeed; 
+	public float horizontalAcceleration; 
+	public float horizontalDeceleration;
+	public float sprintMultiplier;
+	public float currentSprintMultiplier;
+	public float direction;
+    public int terminalVelocity;
 
-	public float speed; //Current player speed.
-	public float maxSpeed; //The fastest a player can move.
-	public float acceleration; //How fast the player will accelerate to max speed.
-	public float deceleration; //How fast the player decelerates down to 0 speed.
-	public float sprintMultiplier; //How much the player's movement speed is multiplied if the player is sprinting.
-	private float currentSprintMultiplier; //Internal variable used to keep track of whether or not the player is sprinting.
-	private float direction; //Which way the player is traveling. 1 for right, -1 for left.
+	public const float LEFT = -1.0f;
+	public const float RIGHT = 1.0f;
 
-	private const float LEFT = -1;
-	private const float RIGHT = 1;
-
-	public float rollTime;
-	public float rollDelay; //How long a player has to wait before they can roll again.
-	public float rollSpeedMultiplier; //Multiplier that determines how 
-	private float currentRollTime;
-	private float currentRollDelay;
-	private bool isRolling;
-
-
-	public bool isDead; //Whether or not the character is currently dead (Unable to move, presented with a death screen).
-	public int maxVelocity; //The player's maximum speed (falling speed primarily).
-
-	//Points used to determine whether the player is currently in contact with a ceiling, is grounded, or is being squished.
-	public Transform leftGroundPoint;
-	public Transform centerGroundPoint;
-	public Transform rightGroundPoint;
-
-	public Transform leftCeilingPoint;
-	public Transform centerCeilingPoint;
-	public Transform rightCeilingPoint;
-
-	public Transform topRightSidePoint;
-	public Transform centerRightSidePoint;
-	public Transform bottomRightSidePoint;
-
-	public Transform topLeftSidePoint;
-	public Transform centerLeftSidePoint;
-	public Transform bottomLeftSidePoint;
-
-	//How large the contact points are.
-	private float radiusOfContactPoints = ContactPoint.radius;
+	ContactBox leftSideContactBox;
+	ContactBox rightSideContactBox;
+	ContactBox ceilingContactBox;
+	ContactBox groundContactBox;
 	
-	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
 
-	private ProjectileShooter weapon;
-	private HealthPool hp;
-	GameObject deathScreen;
+	ProjectileShooter weapon;
 
+	public HealthPool healthPool;
+	
 	public SavePoint lastSavePoint;
-
-
-	/*these floats are the force you use to jump, the max time you want your jump to be allowed to happen,
-     * and a counter to track how long you have been jumping*/
+    public Vector3 spawnPoint;
+    public State currentState;
+	
     public float jumpForce;
     public float jumpTime;
     public float jumpTimeCounter;
@@ -67,53 +44,52 @@ public class PlayerController : MonoBehaviour {
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
-    bool canDoubleJump;
-	bool stoppedJumping = false;
-	bool stoppedDoubleJumping = true;
+    [HideInInspector] public bool canDoubleJump;
+	[HideInInspector] public bool stoppedJumping = false;
+	[HideInInspector] public bool stoppedDoubleJumping = true;
 
-	public CameraController mainCamera;
+	[HideInInspector] public Rigidbody2D rb2D; 
+	[HideInInspector] public Animator animator;
 
-	Rigidbody2D rb2D;  
-	// Use this for initialization
 	void Start () {
 
-		direction = 1;
-		weapon = GetComponent<ProjectileShooter>();
+        spawnPoint = transform.position;
+        currentState = new Default();
+		animator = GetComponent<Animator>();
 		currentSprintMultiplier = 1;
+		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box").GetComponent<ContactBox>();
+		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box").GetComponent<ContactBox>();
+		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box").GetComponent<ContactBox>();
+		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
+		direction = RIGHT;
+		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
 		rb2D = GetComponent<Rigidbody2D>();
-		hp = GetComponent<HealthPool>();
-		hp.currentHealth = hp.maxHealth;
-		deathScreen = (GameObject)Instantiate(Resources.Load("DeathScreen"), new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
-	}
-
-	void FixedUpdate() {
+		healthPool = GetComponent<HealthPool>();
+		healthPool.currentHealth = healthPool.maxHealth;
 		
-		
-		
-		if(!isDead && !isRolling) {
-			sprint();
-			move();
-		}
 	}
 	void Update()
     {
-
-    	if(!isDead) {
-			roll();
-		}
-    	if(!isDead && !isRolling) {
-    		jump();
-    		shoot();
-			
-    	}
-    	capMaxVelocity();
+        currentState.Update();
 		die();
 		respawn();
+		capMaxVelocity();
 		
     }
     /**
-     * Shoots a projectile from the projectile shooter.
+     * Reverses the player sprite on it's x if the direction in which the player is moving changes.
+     */
+    public void flipSprite() {
+    	if(direction == RIGHT) {
+    		this.GetComponent<SpriteRenderer>().flipX = false;
+    	}
+    	if(direction == LEFT) {
+    		this.GetComponent<SpriteRenderer>().flipX = true;
+    	}
+    }
+    /**
+     * Shoots a projectile from the player's weapon.
      */
     public void shoot() {
 
@@ -123,7 +99,7 @@ public class PlayerController : MonoBehaviour {
 
     		if((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
 
-    			weapon.xOffset *= -1;
+    			weapon.xOffset *= LEFT;
     		}
     		weapon.createProjectile();
     		weapon.currentTimeInterval = weapon.timeInterval;
@@ -133,200 +109,65 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
-    public void roll() {
-
-    	if(Input.GetKeyDown("space") && (Input.GetKey("left") || Input.GetKey("right")) && currentRollTime <= 0 && isGrounded() && currentRollDelay <= 0) {
-    		currentRollTime = rollTime;
-    		currentRollDelay = rollDelay;
-    		isRolling = true;
-
-	    	if(Input.GetKey("left")) {
-	    		direction = -1;
-	    	}
-	    	if(Input.GetKey("right")) {
-	    		direction = 1;
-	    	}
-    	}
-    	else if(isRolling && direction != 0) {
-
-    		speed = currentRollTime * direction * rollSpeedMultiplier;
-
-    		if(isTouchingLeftWall() && direction == -1) {
-    			speed = 0;
-    		}
-    		if(isTouchingRightWall() && direction == 1) {
-    			speed = 0;
-    		}
-
-    		transform.position = new Vector3(transform.position.x + speed, transform.position.y, -1); 
-
-    		currentRollTime -= Time.deltaTime;
-    		if(currentRollTime <= 0) {
-    			isRolling = false;
-    		}
-    	}
-    	else {
-    		currentRollDelay -= Time.deltaTime;
-    	}
-    }
-    /**
-     * Move the character left and right.
-     */
-    public void move() {
-    	if(Input.GetKey("left") && (speed < (maxSpeed * currentSprintMultiplier))) {
-    		direction = -1;
-    		if(speed > 0) {
-    			
-    			speed = speed/10;
-    		}
-    		speed = speed - acceleration * Time.deltaTime * currentSprintMultiplier;
-
-    		if(isTouchingLeftWall()) {
-    			speed = 0;
-    		}
-    	}
-    	else if ((Input.GetKey("right")) && (speed > (-1 * maxSpeed * currentSprintMultiplier))) {
-    		direction = 1;
-    		if(speed < 0) {
-    			speed = speed/10;
-    		}
-    		speed = speed + acceleration * Time.deltaTime * currentSprintMultiplier;
-
-    		if(isTouchingRightWall()) {
-    			speed = 0;
-    		}
-
-    	}
-    	else {
-    		if(speed > deceleration * Time.deltaTime) {
-    			speed = speed - deceleration * Time.deltaTime * currentSprintMultiplier;
-    		}
-    		else if(speed < -deceleration * Time.deltaTime) {
-    			speed = speed + deceleration * Time.deltaTime * currentSprintMultiplier;
-    		}
-    		else {
-    			speed = 0;
-    		}
-    	}
-    	if(speed > maxSpeed * currentSprintMultiplier) {
-    		speed = maxSpeed * currentSprintMultiplier;
-    	}
-    	if(speed < -1 * maxSpeed * currentSprintMultiplier) {
-    		speed = -1 * maxSpeed * currentSprintMultiplier;
-    	}
-    	transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, -1); 
-    }
-    /**
-     * Recieve damage. Although current design is that everything is one hit kill, the infastructure for a more gradual system is still in place.
-     */
 	/**
-	 * Handles the character's death upon currentPlayerHealth reaching 0. 
+	 * Handles character death.
 	 */
 	void die() {
-		if(hp.currentHealth <= 0) {
-
-
-			isDead = true;
+		if(healthPool.currentHealth <= 0) {
 			rb2D.isKinematic = true;
 			rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
-
-
-			//Spawn a DeathScreen object in the exact center of the screen. 
-			mainCamera = GameObject.Find("Camera").GetComponent<CameraController>();
-			Vector3 centerScreen = mainCamera.transform.position;
-			centerScreen.z = -3;
-			deathScreen.transform.position = centerScreen;
-			deathScreen.GetComponent<Renderer>().enabled = true;
-			
-
 		}
 	}
+    /**
+     * Handles character respawning.
+     */
 	void respawn() {
 
 		if(Input.GetKeyDown(KeyCode.R)) {
 
-			//If the player has not reached a save point. 
 			if(lastSavePoint != null) {
-
-				isDead = false;
-				rb2D.isKinematic = false;
-
 				Vector3 saveLocation = lastSavePoint.getPosition();
 				transform.position = saveLocation;
-				
-				this.GetComponent<Renderer>().enabled = true; 
-				
-				deathScreen.GetComponent<Renderer>().enabled = false;
-				hp.currentHealth = hp.maxHealth;
 			}
-			//Otherwise just reload the level.
 			else {
-				SceneManager.LoadScene(SceneManager.GetActiveScene().name);﻿
+                transform.position = spawnPoint;
 			}
-			
+            
+            rb2D.isKinematic = false;
+            this.GetComponent<Renderer>().enabled = true; 
+            healthPool.currentHealth = healthPool.maxHealth;
 		}
-		
-	
 	}
 	/**
-	 * Return whether or not the player's ground points are in contact with anything on the layermask "Ground Mask".
+	 * Check to see if the player is touching the ground, ceiling or a wall on either side.
+	 * @return true if touching, false otherwise.
 	 */
 	public bool isGrounded() {
-
-		return Physics2D.OverlapCircle(leftGroundPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(rightGroundPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerGroundPoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.x, groundContactBox.y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's ceilingPoints are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingCeiling() {
-		return Physics2D.OverlapCircle(leftCeilingPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(rightCeilingPoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerCeilingPoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.x, ceilingContactBox.y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's right Wall Points are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingRightWall() {
-		return Physics2D.OverlapCircle(topRightSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerRightSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(bottomRightSidePoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.x, rightSideContactBox.y), 0f, groundMask);
 	}
-	/**
-	 * Return whether or not the player's left Wall Points are in contact with anything on the layermask "Ground Mask".
-	 */
 	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapCircle(topLeftSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(centerLeftSidePoint.position, radiusOfContactPoints, groundMask) || 
-		Physics2D.OverlapCircle(bottomLeftSidePoint.position, radiusOfContactPoints, groundMask);
+		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.x, leftSideContactBox.y), 0f, groundMask);
 	}
 	/**
-	 * Controls whether or not the player is sprinting. If not sprinting, no additional speed is granted.
-	 */
-	public void sprint() {
-		if (Input.GetKey("left shift")) {
-			currentSprintMultiplier = sprintMultiplier;
-		}
-		else {
-			currentSprintMultiplier = 1;
-		}
-	}
-	/**
-	 * Cap the player's speed (typically falling speed) at a given maxVelocity.
+	 * Cap the player's falling speed at terminalVelocity.
 	 */
 	public void capMaxVelocity() {
-		if(rb2D.velocity.magnitude > maxVelocity) {
-			rb2D.velocity = rb2D.velocity.normalized*maxVelocity;
+		if(rb2D.velocity.magnitude > terminalVelocity) {
+			rb2D.velocity = rb2D.velocity.normalized*terminalVelocity;
 		}
 	}
 	/**
 	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
+     * Uses the rigidbody attached to the player to accomplish this.
 	 */
 	public void jump() {
-
-
 		if(Input.GetKeyDown(KeyCode.E) )
         {
             if(isGrounded())
@@ -339,7 +180,7 @@ public class PlayerController : MonoBehaviour {
             	rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
             	rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
                	stoppedDoubleJumping = false;
-                canDoubleJump = false;
+                 canDoubleJump = false;
 
             }
             else {
@@ -394,7 +235,59 @@ public class PlayerController : MonoBehaviour {
 			jumpTimeCounter = 0;
 		}
 	}
+    /**
+     * Assigns the player's save point to a new one. 
+     */
 	public void setSavePoint(SavePoint current) {
 		lastSavePoint = current;
 	}
+    /**
+     * Controls the player's horizontal movement via transform.positon. Does not use the player's rigidbody.
+     */
+	public void move() {
+    	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
+    		
+    		direction = LEFT;
+    		if(horizontalSpeed > 0) {
+    			
+    			horizontalSpeed = horizontalSpeed/10;
+    		}
+    		horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
+
+    		if(isTouchingLeftWall()) {
+    			horizontalSpeed = 0;
+    		}
+    	}
+    	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
+    		direction = RIGHT;
+    		if(horizontalSpeed < 0) {
+    			horizontalSpeed = horizontalSpeed/10;
+    		}
+    		horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
+
+    		if(isTouchingRightWall()) {
+    			horizontalSpeed = 0;
+    		}
+
+    	}
+    	else {
+    		
+    		if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
+    			horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
+    		}
+    		else if(horizontalSpeed < -horizontalDeceleration * Time.deltaTime) {
+    			horizontalSpeed = horizontalSpeed + horizontalDeceleration * Time.deltaTime;
+    		}
+    		else {
+    			horizontalSpeed = 0;
+    		}
+    	}
+    	if(horizontalSpeed > maxSpeed) {
+    		horizontalSpeed = maxSpeed;
+    	}
+    	if(horizontalSpeed < LEFT * maxSpeed ) {
+    		horizontalSpeed = LEFT * maxSpeed;
+    	}
+    	transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
+    }
 }
