@@ -4,9 +4,13 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/**
+ * Contains player abilities and attributes. Uses external states to activate and control available functions and animation states.
+ * @type MonoBehaviour
+ */
 public class PlayerController : MonoBehaviour {
 
-	public float horizontalSpeed; 
+	[ShowOnly] public float horizontalSpeed; 
 	public float maxSpeed; 
 	public float horizontalAcceleration; 
 	public float horizontalDeceleration;
@@ -18,25 +22,21 @@ public class PlayerController : MonoBehaviour {
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;
 
-	[HideInInspector]
-	public bool isDead;
-
 	ContactBox leftSideContactBox;
 	ContactBox rightSideContactBox;
 	ContactBox ceilingContactBox;
 	ContactBox groundContactBox;
 	
-	//Layermask of all things that the player can jump on and collide with. 
 	public LayerMask groundMask;
 
 	ProjectileShooter weapon;
-	HealthPool hp;
+
+	public HealthPool healthPool;
 	
 	public SavePoint lastSavePoint;
 
-	State currentState;
-	/*these floats are the force you use to jump, the max time you want your jump to be allowed to happen,
-     * and a counter to track how long you have been jumping*/
+    public State currentState;
+	
     public float jumpForce;
     public float jumpTime;
     public float jumpTimeCounter;
@@ -44,44 +44,41 @@ public class PlayerController : MonoBehaviour {
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
-    public bool canDoubleJump;
-	public bool stoppedJumping = false;
-	public bool stoppedDoubleJumping = true;
+    [HideInInspector] public bool canDoubleJump;
+	[HideInInspector] public bool stoppedJumping = false;
+	[HideInInspector] public bool stoppedDoubleJumping = true;
 
-	public Rigidbody2D rb2D; 
+	[HideInInspector] public Rigidbody2D rb2D; 
+	[HideInInspector] public Animator animator;
 
-	public Animator animator;
-	// Use this for initialization
 	void Start () {
 
+        currentState = new Default();
 		animator = GetComponent<Animator>();
-		isDead = false;
 		currentSprintMultiplier = 1;
-        currentState = new Idle();
 		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box").GetComponent<ContactBox>();
 		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box").GetComponent<ContactBox>();
 		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box").GetComponent<ContactBox>();
 		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
-
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
 		rb2D = GetComponent<Rigidbody2D>();
-		hp = GetComponent<HealthPool>();
-		hp.currentHealth = hp.maxHealth;
+		healthPool = GetComponent<HealthPool>();
+		healthPool.currentHealth = healthPool.maxHealth;
 		
 	}
 	void Update()
     {
-    	currentState.Update();
-    	flipSprite();
+        currentState.Update();
 		die();
 		respawn();
- 		DetermineState();
 		capMaxVelocity();
-		shoot();
 		
     }
+    /**
+     * Reverses the player sprite on it's x if the direction in which the player is moving changes.
+     */
     public void flipSprite() {
     	if(direction == RIGHT) {
     		this.GetComponent<SpriteRenderer>().flipX = false;
@@ -91,7 +88,7 @@ public class PlayerController : MonoBehaviour {
     	}
     }
     /**
-     * Shoots a projectile from the projectile shooter.
+     * Shoots a projectile from the player's weapon.
      */
     public void shoot() {
 
@@ -111,52 +108,31 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
-    void DetermineState() {
-    	if(isDead) {
-    		currentState = new Frozen();
-    	}
-    	else if(!isGrounded()) {
-    		currentState = new InAir();
-    	}
-		else if (Input.GetKey("left") || Input.GetKey("right")) {
-			if(Input.GetKey("left shift")) {
-				currentState = new Sprint();
-			}
-			else {
-				currentState = new Run();
-			}
-		}
-		else {
-			currentState = new Idle();
-		}
-		Debug.Log(currentState);
-    }
 	/**
-	 * Handles the character's death upon currentPlayerHealth reaching 0. 
+	 * Handles character death.
 	 */
 	void die() {
-		if(hp.currentHealth <= 0) {
-			isDead = true;
+		if(healthPool.currentHealth <= 0) {
 			rb2D.isKinematic = true;
 			rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
 		}
 	}
+    /**
+     * Handles character respawning.
+     */
 	void respawn() {
 
 		if(Input.GetKeyDown(KeyCode.R)) {
 
-			//If the player has not reached a save point. 
 			if(lastSavePoint != null) {
 
-				isDead = false;
 				rb2D.isKinematic = false;
 				Vector3 saveLocation = lastSavePoint.getPosition();
 				transform.position = saveLocation;
 				this.GetComponent<Renderer>().enabled = true; 
-				hp.currentHealth = hp.maxHealth;
+				healthPool.currentHealth = healthPool.maxHealth;
 			}
-			//Otherwise just reload the level.
 			else {
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);﻿
 			}
@@ -179,7 +155,7 @@ public class PlayerController : MonoBehaviour {
 		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.x, leftSideContactBox.y), 0f, groundMask);
 	}
 	/**
-	 * Cap the player's speed (typically falling speed) at a given terminalVelocity.
+	 * Cap the player's falling speed at terminalVelocity.
 	 */
 	public void capMaxVelocity() {
 		if(rb2D.velocity.magnitude > terminalVelocity) {
@@ -188,11 +164,11 @@ public class PlayerController : MonoBehaviour {
 	}
 	/**
 	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
+     * Uses the rigidbody attached to the player to accomplish this.
 	 */
 	public void jump() {
 		if(Input.GetKeyDown(KeyCode.E) )
         {
-        	//animator.SetInteger("State", 2);
             if(isGrounded())
             {	
                 rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
@@ -258,9 +234,15 @@ public class PlayerController : MonoBehaviour {
 			jumpTimeCounter = 0;
 		}
 	}
+    /**
+     * Assigns the player's save point to a new one. 
+     */
 	public void setSavePoint(SavePoint current) {
 		lastSavePoint = current;
 	}
+    /**
+     * Controls the player's horizontal movement via transform.positon. Does not use the player's rigidbody.
+     */
 	public void move() {
     	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
     		

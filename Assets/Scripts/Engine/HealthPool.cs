@@ -18,5 +18,17 @@ public class HealthPool : MonoBehaviour {
 
 	public void takeDamage(int dmg) {
 		currentHealth -= dmg;
+
+		if(currentHealth < 0) {
+			currentHealth = 0;
+		}
+		
+	}
+
+	public bool isDead() {
+		if(currentHealth == 0) {
+			return true;
+		}
+		return false;
 	}
 }
