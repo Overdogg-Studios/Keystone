@@ -15,10 +15,16 @@ public class Default : State {
 
 		changeState();
 
-		if(!player.isGrounded()) {
-            //Air Animation
+		if(!player.isGrounded() ) {
+            
+            if(player.rb2D.velocity.y < 0) {
+            	player.animator.SetInteger("State", 5);
+            }
+            else {
+            	player.animator.SetInteger("State", 2);
+            }
         }
-        if (Input.GetKey("left") || Input.GetKey("right")) {
+        else if (Input.GetKey("left") || Input.GetKey("right")) {
             if(Input.GetKey("left shift")) {
                 player.animator.SetInteger("State", 1);
                 player.currentSprintMultiplier = player.sprintMultiplier;
