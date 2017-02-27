@@ -187,7 +187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1911703235}
   - component: {fileID: 1911703234}
-  - component: {fileID: 1911703233}
+  - component: {fileID: 1911703236}
   m_Layer: 0
   m_Name: sprint_0
   m_TagString: Untagged
@@ -195,19 +195,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1911703233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1911703232}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a82484ad2f41bd84482c7cd214e5efb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  texture: {fileID: 2800000, guid: 9ff6b0d9f9a42ea47b1c97bb6355ecd6, type: 3}
-  timeToDisplayFrame: 0.07
 --- !u!212 &1911703234
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -256,3 +243,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1911703236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1911703232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b26b49d56723441b9efdb4acef2960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprint: {fileID: 2800000, guid: 9ff6b0d9f9a42ea47b1c97bb6355ecd6, type: 3}
+  walk: {fileID: 2800000, guid: 310471dfdd5ac8e4b96cc08d4bd24b50, type: 3}
