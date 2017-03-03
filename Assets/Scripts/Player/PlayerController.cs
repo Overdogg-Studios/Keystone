@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce;
     public float jumpTime;
     public float jumpTimeCounter;
-    
+    public Entity entity;
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Start () {
 
+        entity = GetComponent<Entity>();
         spawnPoint = transform.position;
         currentState = new Default();
 		animator = GetComponent<Animator>();
@@ -114,7 +115,7 @@ public class PlayerController : MonoBehaviour {
 	 */
 	void die() {
 		if(healthPool.currentHealth <= 0) {
-			rb2D.isKinematic = true;
+			//rb2D.isKinematic = true;
 			rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
 		}
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour {
                 transform.position = spawnPoint;
 			}
             
-            rb2D.isKinematic = false;
+            //rb2D.isKinematic = false;
             this.GetComponent<Renderer>().enabled = true; 
             healthPool.currentHealth = healthPool.maxHealth;
 		}
@@ -168,6 +169,12 @@ public class PlayerController : MonoBehaviour {
      * Uses the rigidbody attached to the player to accomplish this.
 	 */
 	public void jump() {
+
+        if(Input.GetKeyDown(KeyCode.E)) {
+            entity.addForceY(0.5f);
+        }
+
+        /*
 		if(Input.GetKeyDown(KeyCode.E) )
         {
             if(isGrounded())
@@ -234,6 +241,7 @@ public class PlayerController : MonoBehaviour {
 			doubleJumpTimeCounter = 0;
 			jumpTimeCounter = 0;
 		}
+        */
 	}
     /**
      * Assigns the player's save point to a new one. 
