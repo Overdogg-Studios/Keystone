@@ -9,25 +9,42 @@ using UnityEngine;
 public class Entity : MonoBehaviour {
 
 	public bool grounded;
+	public float mass;
 	public float gravity;
 	public float velocityX;
 	public float velocityY;
-	public float terminalVelocity;
-	public Collider2D collider;
-	ContactBox groundContactBox;
+	public float maxVelocityY;
+	public float maxVelocityX;
+	public bool isKinematic;
+	private BoxCollider2D bottomCollider;
+	private BoxCollider2D topCollider;
+	private BoxCollider2D rightCollider;
+	private BoxCollider2D leftCollider;
+	public BoxCollider2D collider;
 	public LayerMask groundMask;
 	// Use this for initialization
 	void Start () {
-		collider = GetComponent<Collider2D>();
-		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
+
+		collider = GetComponent<BoxCollider2D>();
+		bottomCollider = gameObject.AddComponent<BoxCollider2D>();
+		topCollider = gameObject.AddComponent<BoxCollider2D>();
+		leftCollider = gameObject.AddComponent<BoxCollider2D>();
+		rightCollider = gameObject.AddComponent<BoxCollider2D>();
+		updateEdgeColliders();
 		groundMask = LayerMask.GetMask("Ground");
-	}
-	void OnCollisionEnter2D(Collision2D other) {
-		Debug.Log("WOAH");
 	}
 	// Update is called once per frame
 	void FixedUpdate () {
-		Debug.Log(isGrounded());
+
+		updateEdgeColliders();
+		/*
+		if (!isKinematic)
+		{
+			velocityY = velocityY - (gravity * mass);
+		}
+
+		
+
 		if(!isGrounded()) {
 			
 			velocityY = velocityY - (Time.deltaTime * gravity);
@@ -37,16 +54,70 @@ public class Entity : MonoBehaviour {
 			velocityY = 0;
 			
 		}
-		//Debug.Log(collider.bounds);
-	}
-	public bool isGrounded() {
+		Debug.Log(isGrounded());
 		
-
-		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.x, groundContactBox.y), 0f, groundMask);
+		capVelocity();
+		transform.position = new Vector3(transform.position.x + (velocityX), transform.position.y + (velocityY), -1); 
+		*/
 	}
 
 	public void addForceY(float force) {
 		velocityY += force;
 		
+	}
+	public void capVelocity() {
+
+		if (velocityY > maxVelocityY)
+		{
+			velocityY = maxVelocityY;
+		} else if (velocityY < -maxVelocityY)
+
+		{
+			velocityY = -maxVelocityY;
+		}
+	}
+	void OnDrawGizmos () {
+		Gizmos.color = new Color(1F, 0F, 0F, 1F);
+		//Right Side Collider
+		
+	}
+	public void updateEdgeColliders() {
+
+		Vector2 offset = new Vector2(collider.size.x / 2 + collider.offset.x, collider.offset.y);
+		Vector2 size = new Vector2((collider.size.x)/10, (collider.size.y)/1.1f);
+		rightCollider.offset = offset;
+		rightCollider.size = size;
+
+		offset = new Vector2(-collider.size.x / 2 + collider.offset.x, collider.offset.y);
+		size = new Vector2((collider.size.x)/10, (collider.size.y)/1.1f);
+		leftCollider.offset = offset;
+		leftCollider.size = size;
+
+		offset = new Vector2(collider.offset.x, collider.size.y / 2 + collider.offset.y);
+		size = new Vector2((collider.size.x)/1.1f, (collider.size.y)/10f);
+		topCollider.offset = offset;
+		topCollider.size = size;
+
+		offset = new Vector2(collider.offset.x, -collider.size.y / 2 + collider.offset.y);
+		size = new Vector2((collider.size.x)/1.1f, (collider.size.y)/10f);
+		bottomCollider.offset = offset;
+		bottomCollider.size = size;
+	}
+
+	/**
+	 * Check to see if the entity is touching the ground, ceiling or a wall on either side.
+	 * @return true if touching, false otherwise.
+	 */
+	public bool isGrounded() {
+		return Physics2D.OverlapBox(bottomCollider.bounds.center, bottomCollider.bounds.size, 0f, groundMask);
+	}
+	public bool isTouchingCeiling() {
+		return Physics2D.OverlapBox(topCollider.bounds.center, topCollider.bounds.size, 0f, groundMask);
+	}
+	public bool isTouchingRightWall() {
+		return Physics2D.OverlapBox(rightCollider.bounds.center, rightCollider.bounds.size, 0f, groundMask);
+	}
+	public bool isTouchingLeftWall() {
+		return Physics2D.OverlapBox(leftCollider.bounds.center, leftCollider.bounds.size, 0f, groundMask);
 	}
 }

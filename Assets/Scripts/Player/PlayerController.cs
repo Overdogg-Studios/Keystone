@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
  */
 public class PlayerController : MonoBehaviour {
 
-	[ShowOnly] public float horizontalSpeed; 
+	public float horizontalSpeed; 
 	public float maxSpeed; 
 	public float horizontalAcceleration; 
 	public float horizontalDeceleration;
@@ -21,11 +21,6 @@ public class PlayerController : MonoBehaviour {
 
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;
-
-	ContactBox leftSideContactBox;
-	ContactBox rightSideContactBox;
-	ContactBox ceilingContactBox;
-	ContactBox groundContactBox;
 	
 	public LayerMask groundMask;
 
@@ -58,10 +53,6 @@ public class PlayerController : MonoBehaviour {
         currentState = new Default();
 		animator = GetComponent<Animator>();
 		currentSprintMultiplier = 1;
-		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box").GetComponent<ContactBox>();
-		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box").GetComponent<ContactBox>();
-		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box").GetComponent<ContactBox>();
-		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
@@ -72,6 +63,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	void Update()
     {
+        Debug.Log(currentState);
         currentState.Update();
 		die();
 		respawn();
@@ -141,22 +133,6 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	/**
-	 * Check to see if the player is touching the ground, ceiling or a wall on either side.
-	 * @return true if touching, false otherwise.
-	 */
-	public bool isGrounded() {
-		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.x, groundContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingCeiling() {
-		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.x, ceilingContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingRightWall() {
-		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.x, rightSideContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.x, leftSideContactBox.y), 0f, groundMask);
-	}
-	/**
 	 * Cap the player's falling speed at terminalVelocity.
 	 */
 	public void capMaxVelocity() {
@@ -170,14 +146,9 @@ public class PlayerController : MonoBehaviour {
 	 */
 	public void jump() {
 
-        if(Input.GetKeyDown(KeyCode.E)) {
-            entity.addForceY(0.5f);
-        }
-
-        /*
 		if(Input.GetKeyDown(KeyCode.E) )
         {
-            if(isGrounded())
+            if(entity.isGrounded())
             {	
                 rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
                 stoppedJumping = false;
@@ -212,7 +183,7 @@ public class PlayerController : MonoBehaviour {
                 rb2D.velocity = new Vector2 (rb2D.velocity.x, doubleJumpForce);
             }
         }
- 		if(!isGrounded()) {
+ 		if(!entity.isGrounded()) {
  			jumpTimeCounter -= Time.deltaTime;
  		}
  		if(stoppedJumping && !canDoubleJump) {
@@ -231,17 +202,16 @@ public class PlayerController : MonoBehaviour {
             doubleJumpTimeCounter = 0;
             stoppedDoubleJumping = true;
         }
-        if(isGrounded()) {
+        if(entity.isGrounded()) {
 			jumpTimeCounter = jumpTime;
 			doubleJumpTimeCounter = doubleJumpTime;
 			canDoubleJump = true;
 		}
-		if (isTouchingCeiling()) {
+		if (entity.isTouchingCeiling()) {
 			rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
 			doubleJumpTimeCounter = 0;
 			jumpTimeCounter = 0;
 		}
-        */
 	}
     /**
      * Assigns the player's save point to a new one. 
@@ -262,7 +232,7 @@ public class PlayerController : MonoBehaviour {
     		}
     		horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
 
-    		if(isTouchingLeftWall()) {
+    		if(entity.isTouchingLeftWall()) {
     			horizontalSpeed = 0;
     		}
     	}
@@ -273,7 +243,7 @@ public class PlayerController : MonoBehaviour {
     		}
     		horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
 
-    		if(isTouchingRightWall()) {
+    		if(entity.isTouchingRightWall()) {
     			horizontalSpeed = 0;
     		}
 
