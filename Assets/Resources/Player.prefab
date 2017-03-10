@@ -164,14 +164,14 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000011388526952}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14e135afc7ac55e4089150a721d61fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   grounded: 0
   mass: 0.1
-  gravity: 0.05
+  gravity: 0
   velocityX: 0
   velocityY: 0
   maxVelocityY: 0.3

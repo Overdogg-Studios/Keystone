@@ -858,7 +858,17 @@ Prefab:
     - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
         type: 2}
       propertyPath: targetCameraHalfHeight
-      value: 6
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
+        type: 2}
+      propertyPath: assetsPixelsPerUnit
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000013194177812, guid: 31c48b9da5e7c274db832ba047ee4c0f,
+        type: 2}
+      propertyPath: retroSnap
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 31c48b9da5e7c274db832ba047ee4c0f, type: 2}
@@ -1509,7 +1519,7 @@ Prefab:
     - target: {fileID: 50000010037456072, guid: 47d2077c10d74ba48ab2162ca5362a2f,
         type: 2}
       propertyPath: m_GravityScale
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114595539811706822, guid: 47d2077c10d74ba48ab2162ca5362a2f,
         type: 2}
@@ -1520,6 +1530,19 @@ Prefab:
         type: 2}
       propertyPath: gravity
       value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012272451012, guid: 47d2077c10d74ba48ab2162ca5362a2f, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012272451012, guid: 47d2077c10d74ba48ab2162ca5362a2f, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114691093834840542, guid: 47d2077c10d74ba48ab2162ca5362a2f,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 47d2077c10d74ba48ab2162ca5362a2f, type: 2}
