@@ -17,7 +17,7 @@ public class Default : State {
 
 		if(!player.entity.isGrounded() ) {
             
-            if(player.rb2D.velocity.y < 0) {
+            if(player.entity.velocity.y < 0) {
             	player.animator.SetInteger("State", 5);
             }
             else {

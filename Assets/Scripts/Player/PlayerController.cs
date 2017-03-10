@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour {
 	[HideInInspector] public bool stoppedJumping = false;
 	[HideInInspector] public bool stoppedDoubleJumping = true;
 
-	[HideInInspector] public Rigidbody2D rb2D; 
+	//[HideInInspector] public Rigidbody2D rb2D; 
 	[HideInInspector] public Animator animator;
 
 	void Start () {
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour {
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
-		rb2D = GetComponent<Rigidbody2D>();
+		//rb2D = GetComponent<Rigidbody2D>();
 		healthPool = GetComponent<HealthPool>();
 		healthPool.currentHealth = healthPool.maxHealth;
 		
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour {
         currentState.Update();
 		die();
 		respawn();
-		capMaxVelocity();
 		
     }
     /**
@@ -108,7 +107,7 @@ public class PlayerController : MonoBehaviour {
 	void die() {
 		if(healthPool.currentHealth <= 0) {
 			//rb2D.isKinematic = true;
-			rb2D.velocity = new Vector2 (0, 0);
+			//rb2D.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
 		}
 	}
@@ -133,19 +132,12 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	/**
-	 * Cap the player's falling speed at terminalVelocity.
-	 */
-	public void capMaxVelocity() {
-		if(rb2D.velocity.magnitude > terminalVelocity) {
-			rb2D.velocity = rb2D.velocity.normalized*terminalVelocity;
-		}
-	}
-	/**
 	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
      * Uses the rigidbody attached to the player to accomplish this.
 	 */
 	public void jump() {
 
+        /*
 		if(Input.GetKeyDown(KeyCode.E) )
         {
             if(entity.isGrounded())
@@ -212,6 +204,7 @@ public class PlayerController : MonoBehaviour {
 			doubleJumpTimeCounter = 0;
 			jumpTimeCounter = 0;
 		}
+        */
 	}
     /**
      * Assigns the player's save point to a new one. 
@@ -223,8 +216,12 @@ public class PlayerController : MonoBehaviour {
      * Controls the player's horizontal movement via transform.positon. Does not use the player's rigidbody.
      */
 	public void move() {
+
+        
     	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
-    		
+
+    		entity.velocity = new Vector2(entity.velocity.x -= 0.1f, entity.velocity.y);
+
     		direction = LEFT;
     		if(horizontalSpeed > 0) {
     			
@@ -237,6 +234,9 @@ public class PlayerController : MonoBehaviour {
     		}
     	}
     	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
+
+            entity.velocity = new Vector2(entity.velocity.x += 0.1f, entity.velocity.y);
+
     		direction = RIGHT;
     		if(horizontalSpeed < 0) {
     			horizontalSpeed = horizontalSpeed/10;
@@ -266,6 +266,6 @@ public class PlayerController : MonoBehaviour {
     	if(horizontalSpeed < LEFT * maxSpeed ) {
     		horizontalSpeed = LEFT * maxSpeed;
     	}
-    	transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
+    	//transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
     }
 }

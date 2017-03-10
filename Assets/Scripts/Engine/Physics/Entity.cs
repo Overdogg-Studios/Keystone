@@ -14,6 +14,7 @@ public class Entity : MonoBehaviour {
 
     public Vector2 velocity;
     public Vector2 acceleration;
+    public float gravity;
 
     public bool onGround = false;
 
@@ -125,7 +126,7 @@ public class Entity : MonoBehaviour {
 
     bool placeFree( Vector2 newPosition )
     {
-        Collider2D hit = Physics2D.OverlapBox(newPosition+hitBox.position, hitBox.size, 0, collideWith);
+        Collider2D hit = Physics2D.OverlapBox(newPosition + hitBox.position, hitBox.size, 0, collideWith);
         return !hit;
     }
 
