@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 /**
  * Contains player abilities and attributes. Uses external states to activate and control available functions and animation states.
@@ -18,7 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public float currentSprintMultiplier;
 	public float direction;
     public int terminalVelocity;
-
+    public ArrayList list = new ArrayList();
 	public const float LEFT = -1.0f;
 	public const float RIGHT = 1.0f;
 	
@@ -63,7 +61,6 @@ public class PlayerController : MonoBehaviour {
 	}
 	void Update()
     {
-        Debug.Log(currentState);
         currentState.Update();
 		die();
 		respawn();
@@ -74,10 +71,10 @@ public class PlayerController : MonoBehaviour {
      */
     public void flipSprite() {
     	if(direction == RIGHT) {
-    		this.GetComponent<SpriteRenderer>().flipX = false;
+    		GetComponent<SpriteRenderer>().flipX = false;
     	}
     	if(direction == LEFT) {
-    		this.GetComponent<SpriteRenderer>().flipX = true;
+    		GetComponent<SpriteRenderer>().flipX = true;
     	}
     }
     /**
@@ -127,7 +124,7 @@ public class PlayerController : MonoBehaviour {
 			}
             
             //rb2D.isKinematic = false;
-            this.GetComponent<Renderer>().enabled = true; 
+            GetComponent<Renderer>().enabled = true; 
             healthPool.currentHealth = healthPool.maxHealth;
 		}
 	}
@@ -218,11 +215,12 @@ public class PlayerController : MonoBehaviour {
 	public void move() {
 
         
-    	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
+    	if(Input.GetKey("left")) {
 
-    		entity.velocity = new Vector2(entity.velocity.x -= 0.1f, entity.velocity.y);
-
-    		direction = LEFT;
+    		entity.velocity.x -= 0.1f;
+            direction = LEFT;
+            /*
+    		
     		if(horizontalSpeed > 0) {
     			
     			horizontalSpeed = horizontalSpeed/10;
@@ -232,12 +230,14 @@ public class PlayerController : MonoBehaviour {
     		if(entity.isTouchingLeftWall()) {
     			horizontalSpeed = 0;
     		}
+            */
     	}
     	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
 
-            entity.velocity = new Vector2(entity.velocity.x += 0.1f, entity.velocity.y);
-
-    		direction = RIGHT;
+            entity.velocity.x += 0.1f;
+            direction = RIGHT;
+            /*
+    		
     		if(horizontalSpeed < 0) {
     			horizontalSpeed = horizontalSpeed/10;
     		}
@@ -246,10 +246,13 @@ public class PlayerController : MonoBehaviour {
     		if(entity.isTouchingRightWall()) {
     			horizontalSpeed = 0;
     		}
+            */
 
     	}
     	else {
     		
+            entity.velocity.x *= 0.9f;
+            /*
     		if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
     			horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
     		}
@@ -259,6 +262,7 @@ public class PlayerController : MonoBehaviour {
     		else {
     			horizontalSpeed = 0;
     		}
+            */
     	}
     	if(horizontalSpeed > maxSpeed) {
     		horizontalSpeed = maxSpeed;

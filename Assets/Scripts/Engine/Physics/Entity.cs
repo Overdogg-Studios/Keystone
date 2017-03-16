@@ -10,13 +10,13 @@ public class Entity : MonoBehaviour {
     public Vector2 previous;
 
     public LayerMask collideWith;
-    public Rect hitBox;
 
+    private Rect hitbox;
+    private BoxCollider2D collider;
     public Vector2 velocity;
     public Vector2 acceleration;
-    public float gravity;
-
-    public bool onGround = false;
+    public float maxHorizontalVelocity;
+    public float maxVerticalVelocity;
 
     //Helper Functions
     public Vector2 direction
@@ -39,41 +39,38 @@ public class Entity : MonoBehaviour {
     }
 
     [ExecuteInEditMode]
-	void Start ()
+    void Start ()
     {
+        collider = GetComponent<BoxCollider2D>();
+        hitbox.size = new Vector2(hitbox.size.x * collider.size.x, hitbox.size.y * collider.size.y);
+        
         position = transform.position;
         previous = position;
 
-	}
+    }
 
     //Validate hitbox size in editor
     private void OnValidate()
     {
-        if (hitBox.size == Vector2.zero)
-            hitBox.size = Vector2.one;
+        if (hitbox.size == Vector2.zero) {
+           hitbox.size = Vector2.one;
+        }
     }
 
     private void Update()
     {
         PhysUpdate();
 
-        onGround = !placeFree(position + (Vector2.down * 0.1F) );
-
-        //Error Handling
-        if( !placeFree(position) )
-        {
-            Debug.Log("stuck in wall");
-        }
     }
 
-	void PhysUpdate ()
+    void PhysUpdate ()
     {
         position = transform.position;
         previous = position;
 
         Vector2 newPosition = position + velocity * Time.deltaTime;
         velocity += acceleration * Time.deltaTime;
-
+        capMaxVelocity();
         //Attempt move; if position blocked, slide along X or Y axis
         if ( !moveTo( newPosition ) )
         {
@@ -91,11 +88,10 @@ public class Entity : MonoBehaviour {
                 moveContact(new Vector2(position.x, newPosition.y));
 
         }
-
+  
         //Move Transform
         transform.position = new Vector3(position.x, position.y, transform.position.z);
-	}
-
+    }
     bool moveTo(Vector2 newPosition)
     {
         if (placeFree(newPosition))
@@ -121,29 +117,42 @@ public class Entity : MonoBehaviour {
                 return;
             }
         }
-        Debug.Log("MoveContact Fail: (" + movement.x + ") , (" + movement.y + ")");
     }
 
     bool placeFree( Vector2 newPosition )
     {
-        Collider2D hit = Physics2D.OverlapBox(newPosition + hitBox.position, hitBox.size, 0, collideWith);
+        Collider2D hit = Physics2D.OverlapBox(newPosition + hitbox.position + collider.offset, hitbox.size, 0, collideWith);
         return !hit;
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireCube(new Vector3(transform.position.x + hitBox.x, transform.position.y + hitBox.y, transform.position.z), hitBox.size );
+        Gizmos.DrawWireCube(new Vector3(transform.position.x + hitbox.x + collider.offset.x, transform.position.y + hitbox.y + collider.offset.y, transform.position.z), hitbox.size );
     }
     public bool isGrounded() {
-		return onGround;
-	}
-	public bool isTouchingCeiling() {
-		return false;
-	}
-	public bool isTouchingRightWall() {
-		return false;
-	}
-	public bool isTouchingLeftWall() {
-		return false;
-	}
+        return !placeFree(position + (Vector2.down * 0.05F));
+    }
+    public bool isTouchingCeiling() {
+        return !placeFree(position + (Vector2.up * 0.05F));
+    }
+    public bool isTouchingRightWall() {
+        return !placeFree(position + (Vector2.right * 0.05F));
+    }
+    public bool isTouchingLeftWall() {
+        return !placeFree(position + (Vector2.left * 0.05F));
+    }
+    private void capMaxVelocity() {
+        if(velocity.x > maxHorizontalVelocity) {
+            velocity.x = maxHorizontalVelocity;
+        }
+        if(velocity.x < -maxHorizontalVelocity) {
+            velocity.x = -maxHorizontalVelocity;
+        }
+        if(velocity.y > maxVerticalVelocity) {
+            velocity.y = maxVerticalVelocity;
+        }
+        if(velocity.y < -maxVerticalVelocity) {
+            velocity.y = -maxVerticalVelocity;
+        }
+    }
 }

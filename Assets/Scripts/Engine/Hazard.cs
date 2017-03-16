@@ -8,7 +8,6 @@ public class Hazard : MonoBehaviour {
 	public bool isActive; //Determines if the projectile will effect anything at all. Non active projectiles do not deal damage to the player or enemies. 
 	private PlayerController  player;
 	
-
 	void Start() {
 		
 	}
