@@ -4,155 +4,196 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour {
 
-    [HideInInspector]
-    public Vector2 position;
-    [HideInInspector]
-    public Vector2 previous;
-
+    //Collision Variables
     public LayerMask collideWith;
-
-    private Rect hitbox;
+    public Rigidbody2D rb;
     private BoxCollider2D collider;
-    public Vector2 velocity;
-    public Vector2 acceleration;
+    private Vector2 hitboxSize;
+
+    //Movement Variables
+    public float horizontalSpeed; 
+    public float horizontalAcceleration; 
+    public float horizontalDeceleration;
     public float maxHorizontalVelocity;
     public float maxVerticalVelocity;
+    public float direction;
+    public float pivotMultiplier;
+    
+    //Jump Variables
+    public float jumpForce;
+    public float jumpTime;
+    public float jumpTimeCounter;
+    public float doubleJumpForce;
+    public float doubleJumpTime;
+    public float doubleJumpTimeCounter;
+    [HideInInspector] public bool canDoubleJump;
+    [HideInInspector] public bool stoppedJumping = false;
+    [HideInInspector] public bool stoppedDoubleJumping = true;
 
-    //Helper Functions
-    public Vector2 direction
-    {
-        get {
-            return velocity.normalized;
-        }
-        set {
-            velocity = value.normalized * velocity.magnitude;
-        }
-    }
-    public float speed
-    {
-        get {
-            return velocity.magnitude;
-        }
-        set {
-            velocity = direction * speed;
-        }
-    }
+    //Miscellaneous
+    public bool flipX;
+
+    //Rigidbody Variables
+    public Vector2 velocity;
+    public bool isKinematic;
+    public float gravityScale;
 
     [ExecuteInEditMode]
     void Start ()
     {
+        direction = Constant.RIGHT;
+        rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<BoxCollider2D>();
-        hitbox.size = new Vector2(hitbox.size.x * collider.size.x, hitbox.size.y * collider.size.y);
-        
-        position = transform.position;
-        previous = position;
-
-    }
-
-    //Validate hitbox size in editor
-    private void OnValidate()
-    {
-        if (hitbox.size == Vector2.zero) {
-           hitbox.size = Vector2.one;
-        }
+        hitboxSize = collider.size - new Vector2(collider.size.x / 10, collider.size.y / 10);
     }
 
     private void Update()
     {
-        PhysUpdate();
+
+        capVelocity();
+        updateRigidBodyVariables();
+        //Debug.Log("Ground: " + isGrounded() + " Ceiling: " + isTouchingCeiling() + " Left Wall: " + isTouchingLeftWall() + " Right Wall: " + isTouchingRightWall());
+    }
+    private void updateRigidBodyVariables() {
+
+        velocity = rb.velocity;
+        isKinematic = rb.isKinematic;
+        gravityScale = rb.gravityScale;
 
     }
-
-    void PhysUpdate ()
-    {
-        position = transform.position;
-        previous = position;
-
-        Vector2 newPosition = position + velocity * Time.deltaTime;
-        velocity += acceleration * Time.deltaTime;
-        capMaxVelocity();
-        //Attempt move; if position blocked, slide along X or Y axis
-        if ( !moveTo( newPosition ) )
-        {
-            if ( moveTo(new Vector2(position.x, newPosition.y)))
-            {
-                moveContact(new Vector2(newPosition.x, position.y));
-                velocity.x = 0;
-            }
-            else if ( moveTo(new Vector2(newPosition.x, position.y)))
-            {
-                moveContact(new Vector2(position.x, newPosition.y));
-                velocity.y = 0;
-            }
-            else
-                moveContact(new Vector2(position.x, newPosition.y));
-
-        }
-  
-        //Move Transform
-        transform.position = new Vector3(position.x, position.y, transform.position.z);
-    }
-    bool moveTo(Vector2 newPosition)
-    {
-        if (placeFree(newPosition))
-        {
-            position = newPosition;
-            return true;
-        }
-        return false;
-    }
-
-    void moveContact(Vector2 newPosition)
-    {
-        float precision = 0.1F;
-        Vector2 movement = newPosition - position;
-        Vector2 bestPosition = position;
-        for (float i = 0; i <= 1; i += precision)
-        {
-            if ( placeFree(position + movement * i) )
-                bestPosition = position+movement*i;
-            else
-            {
-                position = bestPosition;
-                return;
-            }
-        }
-    }
-
     bool placeFree( Vector2 newPosition )
     {
-        Collider2D hit = Physics2D.OverlapBox(newPosition + hitbox.position + collider.offset, hitbox.size, 0, collideWith);
+        Collider2D hit = Physics2D.OverlapBox(newPosition + collider.offset, hitboxSize, 0, collideWith);
         return !hit;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireCube(new Vector3(transform.position.x + hitbox.x + collider.offset.x, transform.position.y + hitbox.y + collider.offset.y, transform.position.z), hitbox.size );
-    }
     public bool isGrounded() {
-        return !placeFree(position + (Vector2.down * 0.05F));
+        return !placeFree( (Vector2) transform.position + (Vector2.down * 0.05f));
     }
     public bool isTouchingCeiling() {
-        return !placeFree(position + (Vector2.up * 0.05F));
+        return !placeFree( (Vector2) transform.position + (Vector2.up * 0.05f));
     }
     public bool isTouchingRightWall() {
-        return !placeFree(position + (Vector2.right * 0.05F));
+        return !placeFree( (Vector2) transform.position + (Vector2.right * 0.05f));
     }
     public bool isTouchingLeftWall() {
-        return !placeFree(position + (Vector2.left * 0.05F));
+        return !placeFree( (Vector2) transform.position + (Vector2.left * 0.05f));
     }
-    private void capMaxVelocity() {
-        if(velocity.x > maxHorizontalVelocity) {
-            velocity.x = maxHorizontalVelocity;
+    private void capVelocity() {
+
+        if(rb.velocity.x > maxHorizontalVelocity) {
+            rb.velocity = new Vector2(maxHorizontalVelocity, rb.velocity.y);
         }
-        if(velocity.x < -maxHorizontalVelocity) {
-            velocity.x = -maxHorizontalVelocity;
+        if(rb.velocity.x < -maxHorizontalVelocity) {
+            rb.velocity = new Vector2(-maxHorizontalVelocity, rb.velocity.y);
         }
-        if(velocity.y > maxVerticalVelocity) {
-            velocity.y = maxVerticalVelocity;
+        if(rb.velocity.y > maxVerticalVelocity) {
+            rb.velocity = new Vector2(rb.velocity.x, maxVerticalVelocity);
         }
-        if(velocity.y < -maxVerticalVelocity) {
-            velocity.y = -maxVerticalVelocity;
+        if(rb.velocity.y < -maxVerticalVelocity) {
+            rb.velocity = new Vector2(rb.velocity.x, -maxVerticalVelocity);
+        }
+    }
+    /**
+     * Controls the player's horizontal movement via transform.positon. 
+     */
+    public void move(float direction) {
+
+        //Accelerate the object.
+        if(direction == Constant.LEFT) {
+            
+            this.direction = direction;
+            flipX = true;
+            horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
+            
+            if(rb.velocity.x > 0) {
+                horizontalSpeed /= pivotMultiplier;
+            }
+        }
+        else if (direction == Constant.RIGHT) {
+            
+            this.direction = direction;
+            flipX = false;
+            horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
+
+            if(rb.velocity.x < 0) {
+                horizontalSpeed /= pivotMultiplier;
+            }
+
+        }
+        //Accelerate the object.
+        else {
+            
+            if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
+                horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
+            }
+            else if(horizontalSpeed < -horizontalDeceleration * Time.deltaTime) {
+                horizontalSpeed = horizontalSpeed + horizontalDeceleration * Time.deltaTime;
+            }
+            else {
+                horizontalSpeed = 0;
+            }
+        }
+        if(horizontalSpeed > maxHorizontalVelocity) {
+            horizontalSpeed = maxHorizontalVelocity;
+        }
+        if(horizontalSpeed < Constant.LEFT * maxHorizontalVelocity ) {
+            horizontalSpeed = Constant.LEFT * maxHorizontalVelocity;
+        }
+        
+        rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
+    }
+    /**
+     * Controls the character's ability to jump and double jump.
+     */
+    public void jump(bool initialJump = false) {
+
+        if(isGrounded())
+        {   
+            rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
+        }
+        //if you keep holding down the jump button...
+        //and your counter hasn't reached zero...
+        if(jumpTimeCounter > 0 && !isGrounded())
+        {
+            //keep jumping!
+            rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
+            jumpTimeCounter -= Time.deltaTime;
+            //and your counter hasn't reached zero...
+        }
+        if(!isGrounded()) {
+            jumpTimeCounter -= Time.deltaTime;
+        }
+        //if you stop holding down the jump button...
+        if(jumpTimeCounter <= 0)
+        {
+            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
+            jumpTimeCounter = 0;
+        }
+        if(isGrounded()) {
+            jumpTimeCounter = jumpTime;
+        }
+    }
+    /**
+     * Reverses the character's sprite on it's x if the direction in which the player is moving changes.
+     */
+    public void flipSprite() {
+        if(!flipX) {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+    }
+    /**
+     * Used for managing one off collisions related to entity movement.
+     * @param Collider2D collision: The object being collided with.
+     */
+    void OnCollisionEnter2D(Collision2D collision) {
+
+        Debug.Log("WOAH");
+        if(isTouchingLeftWall() || isTouchingRightWall()    ) {
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }
 }

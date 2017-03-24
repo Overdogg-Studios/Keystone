@@ -11,7 +11,7 @@
 			"file": "Assets/Scripts/Player/PlayerController.cs",
 			"settings":
 			{
-				"buffer_size": 7882,
+				"buffer_size": 5821,
 				"encoding": "UTF-8 with BOM",
 				"line_ending": "Unix"
 			}
@@ -20,7 +20,7 @@
 			"file": "Assets/Scripts/Engine/Physics/Entity.cs",
 			"settings":
 			{
-				"buffer_size": 4164,
+				"buffer_size": 3647,
 				"encoding": "UTF-8 with BOM",
 				"line_ending": "Unix"
 			}
@@ -29,7 +29,7 @@
 			"file": "Assets/Scripts/Player/States/Default.cs",
 			"settings":
 			{
-				"buffer_size": 1624,
+				"buffer_size": 1558,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -52,7 +52,7 @@
 	"command_palette":
 	{
 		"height": 446.0,
-		"last_filter": "remove",
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -144,7 +144,7 @@
 				"Install Package Control"
 			]
 		],
-		"width": 1272.0
+		"width": 527.0
 	},
 	"console":
 	{
@@ -166,7 +166,6 @@
 	[
 		"/D/Keystone/Keystone",
 		"/D/Keystone/Keystone/Assets",
-		"/D/Keystone/Keystone/Assets/Scripts",
 		"/D/Keystone/Keystone/Assets/Scripts/Audio",
 		"/D/Keystone/Keystone/Assets/Scripts/Enemies",
 		"/D/Keystone/Keystone/Assets/Scripts/Engine",
@@ -175,6 +174,8 @@
 	],
 	"file_history":
 	[
+		"/C/Users/Sean/AppData/Local/Temp/Phys.cs",
+		"/D/Keystone/Keystone/Assets/Scripts/Engine/Physics/Entity.cs",
 		"/D/Keystone/Keystone/Assets/Scripts/Enemies/MovingEnemy.cs",
 		"/C/Users/Sean/Google Drive/CS Study/Practice/BST.java",
 		"/D/Keystone/Keystone/Keystone.sublime-project",
@@ -202,9 +203,24 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"maxSpeed",
+			"horizontalSpeed",
+			"entity.",
+			"rb2D",
+			"hitbox",
+			"entity",
+			"hitbox",
+			"hitBox",
+			"collideWith",
+			"hitbox",
+			"newPosition",
+			"hitBox",
+			"gravity",
+			"acceleration",
+			"Debug.L",
 			"transform.position",
 			"using",
 			"fbdfb5",
@@ -236,15 +252,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7882,
+						"buffer_size": 5821,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								634,
-								568
+								1230,
+								1230
 							]
 						],
 						"settings":
@@ -296,8 +312,8 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
-						"translation.y": 1860.0,
+						"translation.x": 0.0,
+						"translation.y": 540.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -309,15 +325,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4164,
+						"buffer_size": 3647,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								975,
-								975
+								2412,
+								2412
 							]
 						],
 						"settings":
@@ -327,7 +343,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 129.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -339,15 +355,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1624,
+						"buffer_size": 1558,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1335,
-								1335
+								523,
+								523
 							]
 						],
 						"settings":
@@ -357,7 +373,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 360.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,

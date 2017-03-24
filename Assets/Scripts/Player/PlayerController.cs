@@ -8,24 +8,18 @@ using System.Collections;
  */
 public class PlayerController : MonoBehaviour {
 
-	public float horizontalSpeed; 
-	public float maxSpeed; 
-	public float horizontalAcceleration; 
-	public float horizontalDeceleration;
-	public float sprintMultiplier;
-	public float currentSprintMultiplier;
 	public float direction;
     public int terminalVelocity;
+    public const float LEFT = -1.0f;
+    public const float RIGHT = 1.0f;
     public ArrayList list = new ArrayList();
-	public const float LEFT = -1.0f;
-	public const float RIGHT = 1.0f;
 	
 	public LayerMask groundMask;
 
 	ProjectileShooter weapon;
 
 	public HealthPool healthPool;
-	
+	public Entity entity;
 	public SavePoint lastSavePoint;
     public Vector3 spawnPoint;
     public State currentState;
@@ -33,7 +27,6 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce;
     public float jumpTime;
     public float jumpTimeCounter;
-    public Entity entity;
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
@@ -41,20 +34,17 @@ public class PlayerController : MonoBehaviour {
 	[HideInInspector] public bool stoppedJumping = false;
 	[HideInInspector] public bool stoppedDoubleJumping = true;
 
-	//[HideInInspector] public Rigidbody2D rb2D; 
 	[HideInInspector] public Animator animator;
 
 	void Start () {
-
         entity = GetComponent<Entity>();
         spawnPoint = transform.position;
         currentState = new Default();
 		animator = GetComponent<Animator>();
-		currentSprintMultiplier = 1;
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
-		//rb2D = GetComponent<Rigidbody2D>();
+		//entity.rb = GetComponent<Rigidbody2D>();
 		healthPool = GetComponent<HealthPool>();
 		healthPool.currentHealth = healthPool.maxHealth;
 		
@@ -84,11 +74,11 @@ public class PlayerController : MonoBehaviour {
 
     	if(Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
 
-    		weapon.xDirection = direction;
+    		weapon.xDirection = entity.direction;
 
-    		if((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
+    		if((direction == LEFT && weapon.xOffset > 0) || (direction == Constant.RIGHT && weapon.xOffset < 0)) {
 
-    			weapon.xOffset *= LEFT;
+    			weapon.xOffset *= Constant.LEFT;
     		}
     		weapon.createProjectile();
     		weapon.currentTimeInterval = weapon.timeInterval;
@@ -103,8 +93,8 @@ public class PlayerController : MonoBehaviour {
 	 */
 	void die() {
 		if(healthPool.currentHealth <= 0) {
-			//rb2D.isKinematic = true;
-			//rb2D.velocity = new Vector2 (0, 0);
+			//entity.rb.isKinematic = true;
+			//entity.rb.velocity = new Vector2 (0, 0);
 			this.GetComponent<Renderer>().enabled = false;
 		}
 	}
@@ -123,7 +113,7 @@ public class PlayerController : MonoBehaviour {
                 transform.position = spawnPoint;
 			}
             
-            //rb2D.isKinematic = false;
+            //entity.rb.isKinematic = false;
             GetComponent<Renderer>().enabled = true; 
             healthPool.currentHealth = healthPool.maxHealth;
 		}
@@ -134,18 +124,17 @@ public class PlayerController : MonoBehaviour {
 	 */
 	public void jump() {
 
-        /*
-		if(Input.GetKeyDown(KeyCode.E) )
+		if(Input.GetKeyDown("space") )
         {
             if(entity.isGrounded())
             {	
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
+                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
                 stoppedJumping = false;
             }
             else if(canDoubleJump) {
             	
-            	rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
-            	rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
+            	entity.rb.velocity = new Vector2 (entity.rb.velocity.x, 0);
+            	entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
                	stoppedDoubleJumping = false;
                  canDoubleJump = false;
 
@@ -155,21 +144,21 @@ public class PlayerController : MonoBehaviour {
             }
         }
         //if you keep holding down the jump button...
-        if((Input.GetKey(KeyCode.E)) && !stoppedJumping)
+        if((Input.GetKey("space")) && !stoppedJumping)
         {
             //and your counter hasn't reached zero...
             if(jumpTimeCounter > 0)
             {
                 //keep jumping!
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
+                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
             }
         }
-        if((Input.GetKey(KeyCode.E)) && !stoppedDoubleJumping)
+        if((Input.GetKey("space")) && !stoppedDoubleJumping)
         {
             //and your counter hasn't reached zero...
             if(doubleJumpTimeCounter > 0)
             {
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, doubleJumpForce);
+                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, doubleJumpForce);
             }
         }
  		if(!entity.isGrounded()) {
@@ -197,11 +186,10 @@ public class PlayerController : MonoBehaviour {
 			canDoubleJump = true;
 		}
 		if (entity.isTouchingCeiling()) {
-			rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
+			entity.rb.velocity = new Vector2 (entity.rb.velocity.x, 0);
 			doubleJumpTimeCounter = 0;
 			jumpTimeCounter = 0;
 		}
-        */
 	}
     /**
      * Assigns the player's save point to a new one. 
@@ -209,67 +197,4 @@ public class PlayerController : MonoBehaviour {
 	public void setSavePoint(SavePoint current) {
 		lastSavePoint = current;
 	}
-    /**
-     * Controls the player's horizontal movement via transform.positon. Does not use the player's rigidbody.
-     */
-	public void move() {
-
-        
-    	if(Input.GetKey("left")) {
-
-    		entity.velocity.x -= 0.1f;
-            direction = LEFT;
-            /*
-    		
-    		if(horizontalSpeed > 0) {
-    			
-    			horizontalSpeed = horizontalSpeed/10;
-    		}
-    		horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
-
-    		if(entity.isTouchingLeftWall()) {
-    			horizontalSpeed = 0;
-    		}
-            */
-    	}
-    	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
-
-            entity.velocity.x += 0.1f;
-            direction = RIGHT;
-            /*
-    		
-    		if(horizontalSpeed < 0) {
-    			horizontalSpeed = horizontalSpeed/10;
-    		}
-    		horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
-
-    		if(entity.isTouchingRightWall()) {
-    			horizontalSpeed = 0;
-    		}
-            */
-
-    	}
-    	else {
-    		
-            entity.velocity.x *= 0.9f;
-            /*
-    		if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
-    			horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
-    		}
-    		else if(horizontalSpeed < -horizontalDeceleration * Time.deltaTime) {
-    			horizontalSpeed = horizontalSpeed + horizontalDeceleration * Time.deltaTime;
-    		}
-    		else {
-    			horizontalSpeed = 0;
-    		}
-            */
-    	}
-    	if(horizontalSpeed > maxSpeed) {
-    		horizontalSpeed = maxSpeed;
-    	}
-    	if(horizontalSpeed < LEFT * maxSpeed ) {
-    		horizontalSpeed = LEFT * maxSpeed;
-    	}
-    	//transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
-    }
 }
