@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 /**
  * Contains player abilities and attributes. Uses external states to activate and control available functions and animation states.
@@ -10,29 +8,18 @@ using UnityEngine.SceneManagement;
  */
 public class PlayerController : MonoBehaviour {
 
-	[ShowOnly] public float horizontalSpeed; 
-	public float maxSpeed; 
-	public float horizontalAcceleration; 
-	public float horizontalDeceleration;
-	public float sprintMultiplier;
-	public float currentSprintMultiplier;
 	public float direction;
     public int terminalVelocity;
-
-	public const float LEFT = -1.0f;
-	public const float RIGHT = 1.0f;
-
-	ContactBox leftSideContactBox;
-	ContactBox rightSideContactBox;
-	ContactBox ceilingContactBox;
-	ContactBox groundContactBox;
+    public const float LEFT = -1.0f;
+    public const float RIGHT = 1.0f;
+    public ArrayList list = new ArrayList();
 	
 	public LayerMask groundMask;
 
 	ProjectileShooter weapon;
 
 	public HealthPool healthPool;
-	
+	public Entity entity;
 	public SavePoint lastSavePoint;
     public Vector3 spawnPoint;
     public State currentState;
@@ -40,7 +27,6 @@ public class PlayerController : MonoBehaviour {
     public float jumpForce;
     public float jumpTime;
     public float jumpTimeCounter;
-    
     public float doubleJumpForce;
     public float doubleJumpTime;
     public float doubleJumpTimeCounter;
@@ -48,23 +34,17 @@ public class PlayerController : MonoBehaviour {
 	[HideInInspector] public bool stoppedJumping = false;
 	[HideInInspector] public bool stoppedDoubleJumping = true;
 
-	[HideInInspector] public Rigidbody2D rb2D; 
 	[HideInInspector] public Animator animator;
 
 	void Start () {
-
+        entity = GetComponent<Entity>();
         spawnPoint = transform.position;
         currentState = new Default();
 		animator = GetComponent<Animator>();
-		currentSprintMultiplier = 1;
-		leftSideContactBox = transform.Find("Contact Boxes/Left Side Contact Box").GetComponent<ContactBox>();
-		rightSideContactBox = transform.Find("Contact Boxes/Right Side Contact Box").GetComponent<ContactBox>();
-		ceilingContactBox = transform.Find("Contact Boxes/Ceiling Contact Box").GetComponent<ContactBox>();
-		groundContactBox = transform.Find("Contact Boxes/Ground Contact Box").GetComponent<ContactBox>();
 		direction = RIGHT;
 		weapon = GetComponent<ProjectileShooter>();
         jumpTimeCounter = jumpTime;
-		rb2D = GetComponent<Rigidbody2D>();
+		//entity.rb = GetComponent<Rigidbody2D>();
 		healthPool = GetComponent<HealthPool>();
 		healthPool.currentHealth = healthPool.maxHealth;
 		
@@ -72,9 +52,7 @@ public class PlayerController : MonoBehaviour {
 	void Update()
     {
         currentState.Update();
-		die();
 		respawn();
-		capMaxVelocity();
 		
     }
     /**
@@ -82,10 +60,10 @@ public class PlayerController : MonoBehaviour {
      */
     public void flipSprite() {
     	if(direction == RIGHT) {
-    		this.GetComponent<SpriteRenderer>().flipX = false;
+    		GetComponent<SpriteRenderer>().flipX = false;
     	}
     	if(direction == LEFT) {
-    		this.GetComponent<SpriteRenderer>().flipX = true;
+    		GetComponent<SpriteRenderer>().flipX = true;
     	}
     }
     /**
@@ -95,11 +73,11 @@ public class PlayerController : MonoBehaviour {
 
     	if(Input.GetKey("a") && weapon.currentTimeInterval <= 0) {
 
-    		weapon.xDirection = direction;
+    		weapon.xDirection = entity.direction;
 
-    		if((direction == LEFT && weapon.xOffset > 0) || (direction == RIGHT && weapon.xOffset < 0)) {
+    		if((direction == LEFT && weapon.xOffset > 0) || (direction == Constant.RIGHT && weapon.xOffset < 0)) {
 
-    			weapon.xOffset *= LEFT;
+    			weapon.xOffset *= Constant.LEFT;
     		}
     		weapon.createProjectile();
     		weapon.currentTimeInterval = weapon.timeInterval;
@@ -109,16 +87,6 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
-	/**
-	 * Handles character death.
-	 */
-	void die() {
-		if(healthPool.currentHealth <= 0) {
-			rb2D.isKinematic = true;
-			rb2D.velocity = new Vector2 (0, 0);
-			this.GetComponent<Renderer>().enabled = false;
-		}
-	}
     /**
      * Handles character respawning.
      */
@@ -133,106 +101,8 @@ public class PlayerController : MonoBehaviour {
 			else {
                 transform.position = spawnPoint;
 			}
-            
-            rb2D.isKinematic = false;
-            this.GetComponent<Renderer>().enabled = true; 
+            GetComponent<Renderer>().enabled = true; 
             healthPool.currentHealth = healthPool.maxHealth;
-		}
-	}
-	/**
-	 * Check to see if the player is touching the ground, ceiling or a wall on either side.
-	 * @return true if touching, false otherwise.
-	 */
-	public bool isGrounded() {
-		return Physics2D.OverlapBox(groundContactBox.position, new Vector2(groundContactBox.x, groundContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingCeiling() {
-		return Physics2D.OverlapBox(ceilingContactBox.position, new Vector2(ceilingContactBox.x, ceilingContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingRightWall() {
-		return Physics2D.OverlapBox(rightSideContactBox.position, new Vector2(rightSideContactBox.x, rightSideContactBox.y), 0f, groundMask);
-	}
-	public bool isTouchingLeftWall() {
-		return Physics2D.OverlapBox(leftSideContactBox.position, new Vector2(leftSideContactBox.x, leftSideContactBox.y), 0f, groundMask);
-	}
-	/**
-	 * Cap the player's falling speed at terminalVelocity.
-	 */
-	public void capMaxVelocity() {
-		if(rb2D.velocity.magnitude > terminalVelocity) {
-			rb2D.velocity = rb2D.velocity.normalized*terminalVelocity;
-		}
-	}
-	/**
-	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
-     * Uses the rigidbody attached to the player to accomplish this.
-	 */
-	public void jump() {
-		if(Input.GetKeyDown(KeyCode.E) )
-        {
-            if(isGrounded())
-            {	
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
-                stoppedJumping = false;
-            }
-            else if(canDoubleJump) {
-            	
-            	rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
-            	rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
-               	stoppedDoubleJumping = false;
-                 canDoubleJump = false;
-
-            }
-            else {
-
-            }
-        }
-        //if you keep holding down the jump button...
-        if((Input.GetKey(KeyCode.E)) && !stoppedJumping)
-        {
-            //and your counter hasn't reached zero...
-            if(jumpTimeCounter > 0)
-            {
-                //keep jumping!
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, jumpForce);
-            }
-        }
-        if((Input.GetKey(KeyCode.E)) && !stoppedDoubleJumping)
-        {
-            //and your counter hasn't reached zero...
-            if(doubleJumpTimeCounter > 0)
-            {
-                rb2D.velocity = new Vector2 (rb2D.velocity.x, doubleJumpForce);
-            }
-        }
- 		if(!isGrounded()) {
- 			jumpTimeCounter -= Time.deltaTime;
- 		}
- 		if(stoppedJumping && !canDoubleJump) {
- 			doubleJumpTimeCounter -= Time.deltaTime;
- 		}
-        //if you stop holding down the jump button...
-        if(jumpTimeCounter <= 0)
-        {
-            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
-            jumpTimeCounter = 0;
-            stoppedJumping = true;
-        }
-        if(doubleJumpTimeCounter <= 0)
-        {
-            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
-            doubleJumpTimeCounter = 0;
-            stoppedDoubleJumping = true;
-        }
-        if(isGrounded()) {
-			jumpTimeCounter = jumpTime;
-			doubleJumpTimeCounter = doubleJumpTime;
-			canDoubleJump = true;
-		}
-		if (isTouchingCeiling()) {
-			rb2D.velocity = new Vector2 (rb2D.velocity.x, 0);
-			doubleJumpTimeCounter = 0;
-			jumpTimeCounter = 0;
 		}
 	}
     /**
@@ -241,53 +111,4 @@ public class PlayerController : MonoBehaviour {
 	public void setSavePoint(SavePoint current) {
 		lastSavePoint = current;
 	}
-    /**
-     * Controls the player's horizontal movement via transform.positon. Does not use the player's rigidbody.
-     */
-	public void move() {
-    	if(Input.GetKey("left") && (horizontalSpeed < (maxSpeed))) {
-    		
-    		direction = LEFT;
-    		if(horizontalSpeed > 0) {
-    			
-    			horizontalSpeed = horizontalSpeed/10;
-    		}
-    		horizontalSpeed = horizontalSpeed - horizontalAcceleration * Time.deltaTime;
-
-    		if(isTouchingLeftWall()) {
-    			horizontalSpeed = 0;
-    		}
-    	}
-    	else if ((Input.GetKey("right")) && (horizontalSpeed > (LEFT * maxSpeed))) {
-    		direction = RIGHT;
-    		if(horizontalSpeed < 0) {
-    			horizontalSpeed = horizontalSpeed/10;
-    		}
-    		horizontalSpeed = horizontalSpeed + horizontalAcceleration * Time.deltaTime;
-
-    		if(isTouchingRightWall()) {
-    			horizontalSpeed = 0;
-    		}
-
-    	}
-    	else {
-    		
-    		if(horizontalSpeed > horizontalDeceleration * Time.deltaTime) {
-    			horizontalSpeed = horizontalSpeed - horizontalDeceleration * Time.deltaTime;
-    		}
-    		else if(horizontalSpeed < -horizontalDeceleration * Time.deltaTime) {
-    			horizontalSpeed = horizontalSpeed + horizontalDeceleration * Time.deltaTime;
-    		}
-    		else {
-    			horizontalSpeed = 0;
-    		}
-    	}
-    	if(horizontalSpeed > maxSpeed) {
-    		horizontalSpeed = maxSpeed;
-    	}
-    	if(horizontalSpeed < LEFT * maxSpeed ) {
-    		horizontalSpeed = LEFT * maxSpeed;
-    	}
-    	transform.position = new Vector3(transform.position.x + horizontalSpeed * Time.deltaTime * currentSprintMultiplier, transform.position.y, -1); 
-    }
 }

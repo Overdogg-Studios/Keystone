@@ -9,44 +9,60 @@ using UnityEngine;
 public class Default : State {
 
     public const string name = "Default";
-
+    private float direction = 0;
+    private bool newJump;
+    private bool holdingJump;
 	private PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 	public override void Update () {
 
-		changeState();
 
-		if(!player.isGrounded() ) {
-            
-            if(player.rb2D.velocity.y < 0) {
+        direction = 0;
+		changeState();
+        newJump = false;
+        holdingJump = false;
+
+        //Get Direction
+        if (Input.GetKey("left")) {
+            direction = Constant.LEFT;
+        }
+        if (Input.GetKey("right")) {
+            direction = Constant.RIGHT;
+        }
+        //Get Jumps
+        if (Input.GetKeyDown("space")) {
+            newJump = true;           
+        }
+        if (Input.GetKey("space")) {
+            holdingJump = true;         
+        }
+        //In Air
+		if(!player.entity.isGrounded() ) {
+            Debug.Log(player.entity.rb.velocity.y);
+            if(player.entity.rb.velocity.y <= 0) {
             	player.animator.SetInteger("State", 5);
             }
             else {
             	player.animator.SetInteger("State", 2);
             }
         }
-        else if (Input.GetKey("left") || Input.GetKey("right")) {
-            if(Input.GetKey("left shift")) {
-                player.animator.SetInteger("State", 1);
-                player.currentSprintMultiplier = player.sprintMultiplier;
-            }
-            else {
-                player.animator.SetInteger("State", 4);
-                player.currentSprintMultiplier = 1;
-            }
+        //Running
+        else if (direction != 0) {
+            player.animator.SetInteger("State", 1);
+
+            
+
         }
         else {
-            if(player.horizontalSpeed == 0) {
+            if(player.entity.horizontalSpeed == 0) {
             	player.animator.SetInteger("State", 0);
-	        }
-	        else {
-	            player.animator.SetInteger("State", 4);
 	        }
         }
 
-		player.move();
-		player.jump();
+        player.entity.jump(newJump, holdingJump);
+		player.entity.move(direction);
 		player.flipSprite();
 		player.shoot();
+        player.entity.flipSprite();
         
 	}
     public override string ToString() {

@@ -1,0 +1,504 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Assets/Scripts/Player/PlayerController.cs",
+			"settings":
+			{
+				"buffer_size": 5821,
+				"encoding": "UTF-8 with BOM",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Scripts/Engine/Physics/Entity.cs",
+			"settings":
+			{
+				"buffer_size": 3647,
+				"encoding": "UTF-8 with BOM",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Scripts/Player/States/Default.cs",
+			"settings":
+			{
+				"buffer_size": 1558,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Scripts/Engine/Hazard.cs",
+			"settings":
+			{
+				"buffer_size": 690,
+				"encoding": "UTF-8 with BOM",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 446.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"install packa",
+				"Package Control: Install Package"
+			],
+			[
+				"color",
+				"Color Scheme Editor: Edit current color scheme"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			],
+			[
+				"colorsub",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"installp",
+				"Package Control: Install Package"
+			],
+			[
+				"remove pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"boxy",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"omnish",
+				"OmniSharpSublime: Hide Info Panel"
+			],
+			[
+				"omnisharp",
+				"OmniSharpSublime: Show Info Panel"
+			],
+			[
+				"install pack",
+				"Package Control: Install Package"
+			],
+			[
+				"c#",
+				"Set Syntax: C#"
+			],
+			[
+				"remove packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"colorsublime",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"packa",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"colorpick",
+				"Color Picker"
+			],
+			[
+				"colorpicc",
+				"Color Picker: Insert Color"
+			],
+			[
+				"package Resour",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"colorschemeed",
+				"Color Scheme Editor: Edit current color scheme"
+			],
+			[
+				"Boxy",
+				"Boxy Theme: Activation"
+			],
+			[
+				"pack",
+				"Install Package Control"
+			]
+		],
+		"width": 527.0
+	},
+	"console":
+	{
+		"height": 186.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Keystone/Keystone",
+		"/D/Keystone/Keystone/Assets",
+		"/D/Keystone/Keystone/Assets/Scripts/Audio",
+		"/D/Keystone/Keystone/Assets/Scripts/Enemies",
+		"/D/Keystone/Keystone/Assets/Scripts/Engine",
+		"/D/Keystone/Keystone/Assets/Scripts/Player",
+		"/D/Keystone/Keystone/Assets/Scripts/Player/States"
+	],
+	"file_history":
+	[
+		"/C/Users/Sean/AppData/Local/Temp/Phys.cs",
+		"/D/Keystone/Keystone/Assets/Scripts/Engine/Physics/Entity.cs",
+		"/D/Keystone/Keystone/Assets/Scripts/Enemies/MovingEnemy.cs",
+		"/C/Users/Sean/Google Drive/CS Study/Practice/BST.java",
+		"/D/Keystone/Keystone/Keystone.sublime-project",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/Colorsublime - Themes/1337.tmTheme",
+		"/D/Keystone/Keystone/Assets/Scripts/Projectiles/ProjectileShooter.cs",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/OmniSharp/OmniSharpSublime.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/User/OmniSharpSublime.sublime-settings",
+		"/C/Users/Sean/AppData/Local/Temp/Temp1_omnisharp-server-master.zip/omnisharp-server-master/README.md",
+		"/C/Users/Sean/Google Drive/School/University/5th Semester/CS 310/Projects/scarpen6-hw1/DynamicArray.java",
+		"/D/Keystone/Keystone/.gitignore",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/User/C#.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/Sean/AppData/Roaming/Sublime Text 3/Packages/Boxy Theme/schemes/Boxy Tomorrow.tmTheme"
+	],
+	"find":
+	{
+		"height": 59.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"maxSpeed",
+			"horizontalSpeed",
+			"entity.",
+			"rb2D",
+			"hitbox",
+			"entity",
+			"hitbox",
+			"hitBox",
+			"collideWith",
+			"hitbox",
+			"newPosition",
+			"hitBox",
+			"gravity",
+			"acceleration",
+			"Debug.L",
+			"transform.position",
+			"using",
+			"fbdfb5",
+			"fdb082",
+			"#ffffff"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Assets/Scripts/Player/PlayerController.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5821,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1230,
+								1230
+							]
+						],
+						"settings":
+						{
+							"oops":
+							{
+								"1025,1046": "Name should have prefix '_'. (Rule 'Fields').",
+								"1082,1095": "Name should have prefix '_'. (Rule 'Fields').",
+								"1128,1142": "Name should have prefix '_'. (Rule 'Fields').",
+								"1145,1150": "Initializing field by default value is redundant",
+								"1183,1203": "Name should have prefix '_'. (Rule 'Fields').",
+								"1295,1303": "Name should have prefix '_'. (Rule 'Fields').",
+								"2005,2015": "'flipSprite' should start with an upper case letter. (Rule 'Methods')",
+								"2025,2027": "Convert to '&=' expresssion",
+								"2028,2037": "Comparison of floating point numbers can be unequal due to the differing precision of the two values.",
+								"2114,2116": "Convert to '|=' expresssion",
+								"2117,2126": "Comparison of floating point numbers can be unequal due to the differing precision of the two values.",
+								"2287,2292": "'shoot' should start with an upper case letter. (Rule 'Methods')",
+								"2411,2420": "Comparison of floating point numbers can be unequal due to the differing precision of the two values.",
+								"2456,2465": "Comparison of floating point numbers can be unequal due to the differing precision of the two values.",
+								"273,288": "Name should have prefix '_'. (Rule 'Fields').",
+								"2777,2779": "Convert to '&=' expresssion",
+								"2887,2891": "'this.' is redundant and can be removed safely.",
+								"305,313": "Name should have prefix '_'. (Rule 'Fields').",
+								"330,352": "Name should have prefix '_'. (Rule 'Fields').",
+								"3310,3314": "'this.' is redundant and can be removed safely.",
+								"3672,3676": "'jump' should start with an upper case letter. (Rule 'Methods')",
+								"369,391": "Name should have prefix '_'. (Rule 'Fields').",
+								"407,423": "Name should have prefix '_'. (Rule 'Fields').",
+								"439,462": "Name should have prefix '_'. (Rule 'Fields').",
+								"478,487": "Name should have prefix '_'. (Rule 'Fields').",
+								"504,520": "Name should have prefix '_'. (Rule 'Fields').",
+								"543,547": "Name should have prefix '_'. (Rule 'Fields').",
+								"6018,6030": "'setSavePoint' should start with an upper case letter. (Rule 'Methods')",
+								"6220,6224": "'move' should start with an upper case letter. (Rule 'Methods')",
+								"655,665": "Name should have prefix '_'. (Rule 'Fields').",
+								"715,725": "Name should have prefix '_'. (Rule 'Fields').",
+								"747,760": "Name should have prefix '_'. (Rule 'Fields').",
+								"781,791": "Name should have prefix '_'. (Rule 'Fields').",
+								"810,822": "Name should have prefix '_'. (Rule 'Fields').",
+								"843,852": "Name should have prefix '_'. (Rule 'Fields').",
+								"871,879": "Name should have prefix '_'. (Rule 'Fields').",
+								"898,913": "Name should have prefix '_'. (Rule 'Fields').",
+								"933,939": "Name should have prefix '_'. (Rule 'Fields').",
+								"958,973": "Name should have prefix '_'. (Rule 'Fields').",
+								"992,1006": "Name should have prefix '_'. (Rule 'Fields')."
+							},
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 540.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Assets/Scripts/Engine/Physics/Entity.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3647,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2412,
+								2412
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Scripts/Player/States/Default.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1558,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								523,
+								523
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Assets/Scripts/Engine/Hazard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 690,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								690,
+								690
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 30.0
+	},
+	"input":
+	{
+		"height": 50.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 130.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.variable_get":
+	{
+		"height": 130.0
+	},
+	"pinned_build_system": "",
+	"project": "Keystone.sublime-project",
+	"replace":
+	{
+		"height": 112.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 289.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -32,3 +32,8 @@ ExportedObj/
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# ============ #
+# Sublime Text #
+# ============ #
+*.sublime-project
