@@ -5,42 +5,34 @@ using UnityEngine;
 public class Entity : MonoBehaviour {
 
     //Collision Variables
-    public LayerMask collideWith;
+    [HideInInspector] private LayerMask collideWith;
     public Rigidbody2D rb;
     private BoxCollider2D collider;
     private Vector2 hitboxSize;
 
     //Movement Variables
     public float horizontalSpeed; 
-    public float horizontalAcceleration; 
-    public float horizontalDeceleration;
-    public float maxHorizontalVelocity;
-    public float maxVerticalVelocity;
+    public float horizontalAcceleration = 8; 
+    public float horizontalDeceleration = 15;
+    public float maxHorizontalVelocity = 5;
+    public float maxVerticalVelocity = 6.5f;
     public float direction;
-    public float pivotMultiplier;
+    public float pivotMultiplier = 2;
     
     //Jump Variables
-    public float jumpForce;
-    public float jumpTime;
+    public float jumpForce = 5;
+    public float jumpTime = 0.15f;
     public float jumpTimeCounter;
-    public float doubleJumpForce;
-    public float doubleJumpTime;
-    public float doubleJumpTimeCounter;
-    [HideInInspector] public bool canDoubleJump;
-    [HideInInspector] public bool stoppedJumping = false;
-    [HideInInspector] public bool stoppedDoubleJumping = true;
+    public int currentNumberOfJumps;
+    public int numberOfJumps = 1;
 
     //Miscellaneous
     public bool flipX;
 
-    //Rigidbody Variables
-    public Vector2 velocity;
-    public bool isKinematic;
-    public float gravityScale;
-
     [ExecuteInEditMode]
     void Start ()
     {
+        collideWith = LayerMask.GetMask("Ground");
         direction = Constant.RIGHT;
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<BoxCollider2D>();
@@ -51,15 +43,7 @@ public class Entity : MonoBehaviour {
     {
 
         capVelocity();
-        updateRigidBodyVariables();
         //Debug.Log("Ground: " + isGrounded() + " Ceiling: " + isTouchingCeiling() + " Left Wall: " + isTouchingLeftWall() + " Right Wall: " + isTouchingRightWall());
-    }
-    private void updateRigidBodyVariables() {
-
-        velocity = rb.velocity;
-        isKinematic = rb.isKinematic;
-        gravityScale = rb.gravityScale;
-
     }
     bool placeFree( Vector2 newPosition )
     {
@@ -146,33 +130,20 @@ public class Entity : MonoBehaviour {
     /**
      * Controls the character's ability to jump and double jump.
      */
-    public void jump(bool initialJump = false) {
+    public void jump(bool newJump = true, bool holdingJump = true) {
+        if (isGrounded()) {
+            currentNumberOfJumps = numberOfJumps;
+        }
 
-        if(isGrounded())
-        {   
-            rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
-        }
-        //if you keep holding down the jump button...
-        //and your counter hasn't reached zero...
-        if(jumpTimeCounter > 0 && !isGrounded())
-        {
-            //keep jumping!
-            rb.velocity = new Vector2 (rb.velocity.x, jumpForce);
-            jumpTimeCounter -= Time.deltaTime;
-            //and your counter hasn't reached zero...
-        }
-        if(!isGrounded()) {
-            jumpTimeCounter -= Time.deltaTime;
-        }
-        //if you stop holding down the jump button...
-        if(jumpTimeCounter <= 0)
-        {
-            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
-            jumpTimeCounter = 0;
-        }
-        if(isGrounded()) {
+        if (currentNumberOfJumps > 0 && newJump) {
+            currentNumberOfJumps--;
             jumpTimeCounter = jumpTime;
         }
+        if(jumpTimeCounter >= 0 && holdingJump) {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            jumpTimeCounter -= Time.deltaTime;
+        }
+        
     }
     /**
      * Reverses the character's sprite on it's x if the direction in which the player is moving changes.
@@ -194,6 +165,9 @@ public class Entity : MonoBehaviour {
         Debug.Log("WOAH");
         if(isTouchingLeftWall() || isTouchingRightWall()    ) {
             rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        if(isTouchingCeiling()) {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
         }
     }
 }

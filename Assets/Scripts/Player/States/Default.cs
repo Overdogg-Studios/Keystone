@@ -10,14 +10,16 @@ public class Default : State {
 
     public const string name = "Default";
     private float direction = 0;
-    private bool initialJump;
+    private bool newJump;
+    private bool holdingJump;
 	private PlayerController player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 	public override void Update () {
 
 
         direction = 0;
 		changeState();
-        initialJump = false;
+        newJump = false;
+        holdingJump = false;
 
         //Get Direction
         if (Input.GetKey("left")) {
@@ -26,9 +28,12 @@ public class Default : State {
         if (Input.GetKey("right")) {
             direction = Constant.RIGHT;
         }
+        //Get Jumps
+        if (Input.GetKeyDown("space")) {
+            newJump = true;           
+        }
         if (Input.GetKey("space")) {
-            initialJump = true;
-            player.entity.jump(initialJump);
+            holdingJump = true;         
         }
         //In Air
 		if(!player.entity.isGrounded() ) {
@@ -53,8 +58,8 @@ public class Default : State {
 	        }
         }
 
+        player.entity.jump(newJump, holdingJump);
 		player.entity.move(direction);
-		//player.entity.jump(initialJump);
 		player.flipSprite();
 		player.shoot();
         player.entity.flipSprite();

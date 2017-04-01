@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour {
 	void Update()
     {
         currentState.Update();
-		die();
 		respawn();
 		
     }
@@ -88,16 +87,6 @@ public class PlayerController : MonoBehaviour {
     	}
     	
     }
-	/**
-	 * Handles character death.
-	 */
-	void die() {
-		if(healthPool.currentHealth <= 0) {
-			//entity.rb.isKinematic = true;
-			//entity.rb.velocity = new Vector2 (0, 0);
-			this.GetComponent<Renderer>().enabled = false;
-		}
-	}
     /**
      * Handles character respawning.
      */
@@ -112,83 +101,8 @@ public class PlayerController : MonoBehaviour {
 			else {
                 transform.position = spawnPoint;
 			}
-            
-            //entity.rb.isKinematic = false;
             GetComponent<Renderer>().enabled = true; 
             healthPool.currentHealth = healthPool.maxHealth;
-		}
-	}
-	/**
-	 * Controls the character's ability to jump, double jump and deals with the character's response to various jump related collisons. (Ground and Ceiling).
-     * Uses the rigidbody attached to the player to accomplish this.
-	 */
-	public void jump() {
-
-		if(Input.GetKeyDown("space") )
-        {
-            if(entity.isGrounded())
-            {	
-                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
-                stoppedJumping = false;
-            }
-            else if(canDoubleJump) {
-            	
-            	entity.rb.velocity = new Vector2 (entity.rb.velocity.x, 0);
-            	entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
-               	stoppedDoubleJumping = false;
-                 canDoubleJump = false;
-
-            }
-            else {
-
-            }
-        }
-        //if you keep holding down the jump button...
-        if((Input.GetKey("space")) && !stoppedJumping)
-        {
-            //and your counter hasn't reached zero...
-            if(jumpTimeCounter > 0)
-            {
-                //keep jumping!
-                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, jumpForce);
-            }
-        }
-        if((Input.GetKey("space")) && !stoppedDoubleJumping)
-        {
-            //and your counter hasn't reached zero...
-            if(doubleJumpTimeCounter > 0)
-            {
-                entity.rb.velocity = new Vector2 (entity.rb.velocity.x, doubleJumpForce);
-            }
-        }
- 		if(!entity.isGrounded()) {
- 			jumpTimeCounter -= Time.deltaTime;
- 		}
- 		if(stoppedJumping && !canDoubleJump) {
- 			doubleJumpTimeCounter -= Time.deltaTime;
- 		}
-        //if you stop holding down the jump button...
-        if(jumpTimeCounter <= 0)
-        {
-            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
-            jumpTimeCounter = 0;
-            stoppedJumping = true;
-        }
-        if(doubleJumpTimeCounter <= 0)
-        {
-            //stop jumping and set your counter to zero.  The timer will reset once we touch the ground again in the update function.
-            doubleJumpTimeCounter = 0;
-            stoppedDoubleJumping = true;
-        }
-        if(entity.isGrounded()) {
-			jumpTimeCounter = jumpTime;
-			doubleJumpTimeCounter = doubleJumpTime;
-			canDoubleJump = true;
-		}
-		if (entity.isTouchingCeiling()) {
-			entity.rb.velocity = new Vector2 (entity.rb.velocity.x, 0);
-			doubleJumpTimeCounter = 0;
-			jumpTimeCounter = 0;
 		}
 	}
     /**
